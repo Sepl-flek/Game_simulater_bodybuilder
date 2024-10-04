@@ -3,6 +3,7 @@
 #include <memory>
 #include "AssetManager.h"
 #include "GameMenu.h"
+#include <SFML/Audio.hpp>
 class Engine
 {
 	AssetManager manager; // менеджер ресурсов

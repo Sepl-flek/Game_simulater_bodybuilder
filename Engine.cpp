@@ -38,7 +38,10 @@ void Engine::GameMenu()
     
     setTextStyle(Titul, 770, 50, 120, sf::Color(235, 78, 78), "Bodybuilder Club");// параметры главного текста
 
-    
+	sf::Sound sound_next;
+	sound_next.setBuffer(AssetManager::GetSoundBuffer("sound/audiomenu2.wav"));
+	sf::Sound enter;
+	enter.setBuffer(AssetManager::GetSoundBuffer("sound/audiomenu5.wav"));
     
     
     while (window.isOpen())
@@ -49,15 +52,20 @@ void Engine::GameMenu()
             switch (event.type)
             {
             case sf::Event::KeyReleased:
-                if (event.key.code == sf::Keyboard::Up) { mymenu.MoveUp(); break; }
-                if (event.key.code == sf::Keyboard::Down) { mymenu.MoveDown(); break; }
+				if (event.key.code == sf::Keyboard::Up) { sound_next.play(); mymenu.MoveUp();
+				break; }
+				if (event.key.code == sf::Keyboard::Down) { sound_next.play(); mymenu.MoveDown(); break; }
                 if (event.key.code == sf::Keyboard::Return)
                 {
+					enter.play();
+					while (enter.getStatus() == sf::Sound::Playing) {
+						sf::sleep(sf::microseconds(100));
+					}
                     switch (mymenu.getSelectedMenuNumber())
                     {
                     case 0:  window.close(); return; break;
               
-					case 2: exit(0); break;
+					case 1: exit(0); break;
                     default:break;
                     }
                 } break;
