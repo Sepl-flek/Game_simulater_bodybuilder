@@ -29,6 +29,7 @@ void Engine::GameMenu()
 
 	//Задний фон
 	sf::RectangleShape background(sf::Vector2f(width, heght));
+	
 
 	background.setTexture(&AssetManager::GetTexture("image/menu.jpg"));
 
@@ -77,11 +78,14 @@ void Engine::GameMenu()
         window.clear();
         window.draw(background);
         window.draw(Titul);
+		
         mymenu.draw();
         window.display();
     }
 
 }
+
+
 
 void Engine::input()
 {

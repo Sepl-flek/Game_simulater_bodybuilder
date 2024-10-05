@@ -4,11 +4,13 @@
 #include "AssetManager.h"
 #include "GameMenu.h"
 #include <SFML/Audio.hpp>
+#include "Person.h"
 class Engine
 {
 	AssetManager manager; // менеджер ресурсов
 	
-
+	Person person = Person(1);
+	
 	// возможные доработки ращрешения
 	std::unique_ptr<sf::RenderWindow> window = std::make_unique<sf::RenderWindow>(sf::VideoMode::getDesktopMode(),
 		L"БОДИБИЛДЕР", sf::Style::Fullscreen);
@@ -29,6 +31,7 @@ class Engine
 
 	// всй что связано с главным меню
 	void GameMenu();
+	
 
 	void input();
 	void update(sf::Time const & deltaTime);

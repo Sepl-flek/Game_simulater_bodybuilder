@@ -135,6 +135,7 @@
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameMenu.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Person.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="openal32.dll" />
@@ -153,6 +154,7 @@
     <ClInclude Include="AssetManager.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="GameMenu.h" />
+    <ClInclude Include="Person.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
