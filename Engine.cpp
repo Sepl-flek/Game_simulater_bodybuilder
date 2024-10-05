@@ -100,9 +100,9 @@ void Engine::GamePlay()
 	
 
 	float time;
-	sf::Clock clock;
+	sf::Clock clock, clockAnimPlay;
 	const float parametr = 1;
-
+	int traffic = 0; // вид анимации
 	sf::Vector2f moveRec;// запись о том где у нас сейчас корабль
 	while (window.isOpen())
 	{
@@ -114,7 +114,7 @@ void Engine::GamePlay()
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-		
+
 			if (event.key.code == sf::Keyboard::Escape) { window.close(); }
 
 			switch (event.type)
@@ -122,18 +122,21 @@ void Engine::GamePlay()
 			case sf::Event::KeyPressed: // кнопка нажата
 				if ((event.key.code == sf::Keyboard::S)) {
 					moveRec.y = parametr * time;
-					
+					traffic = 1;
+
 				}
 				if ((event.key.code == sf::Keyboard::W)) {
 					moveRec.y = -parametr * time;
-					;
+					traffic = 1;
 				}
 				if ((event.key.code == sf::Keyboard::A)) {
 					moveRec.x = -parametr * time;
+					traffic = 1;
 
 				}
 				if ((event.key.code == sf::Keyboard::D)) {
 					moveRec.x = parametr * time;
+					traffic = 1;
 				}
 				break;
 
@@ -141,17 +144,20 @@ void Engine::GamePlay()
 			case sf::Event::KeyReleased: //кнопка отпущена 
 				if ((event.key.code == sf::Keyboard::S)) {
 					moveRec.y = 0;
+					traffic = 0;
 
 				}
 				if ((event.key.code == sf::Keyboard::W)) {
 					moveRec.y = 0;
-					
+					traffic = 0;
 				}
 				if ((event.key.code == sf::Keyboard::A)) {
 					moveRec.x = 0;
+					traffic = 0;
 				}
 				if ((event.key.code == sf::Keyboard::D)) {
 					moveRec.x = 0;
+					traffic = 0;
 				}
 				break;
 
@@ -159,7 +165,16 @@ void Engine::GamePlay()
 				break;
 
 			}
+
 		}
+		if (clockAnimPlay.getElapsedTime() > sf::milliseconds(100)) {
+			clockAnimPlay.restart();
+
+			person.animation(traffic);
+
+		}
+
+		
 		person.move(moveRec, width, heght);
 		window.clear();
 		window.draw(background);
@@ -186,15 +201,12 @@ void Engine::update(sf::Time const& deltaTime)
 
 void Engine::draw()
 {
-	window->clear();
-	window->draw(background);
 	
-	window->display();
 }
 
 Engine::Engine()
 {
-	background.setTexture(&AssetManager::GetTexture("image/background.jpg"));
+	
 
 }
 

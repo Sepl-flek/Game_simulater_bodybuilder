@@ -45,5 +45,27 @@ void Person::draw(sf::RenderWindow& window)
 
 void Person::animation(int trafic)
 {
-
+	int in_animation = 2;
+	if (trafic == 1) {
+		if (step_animation <= 1)
+		{
+			person.setTextureRect(sf::IntRect(xsp[in_animation], ysp, widthsp[in_animation], heightsp));
+			step_animation = 2;
+		}
+		if (12 > step_animation >= 1)
+		{
+			step_animation += 1;
+			person.setTextureRect(sf::IntRect(xsp[step_animation], ysp, widthsp[step_animation], heightsp));
+		}
+		else 
+		{
+			step_animation = 4;
+			person.setTextureRect(sf::IntRect(xsp[step_animation], ysp, widthsp[step_animation], heightsp));
+		}
+		
+	}
+	if (trafic == 0) {
+		step_animation = 0;
+		person.setTextureRect(sf::IntRect(xsp[step_animation], ysp, widthsp[step_animation], heightsp));
+	}
 }
