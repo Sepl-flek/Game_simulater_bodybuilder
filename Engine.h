@@ -31,6 +31,7 @@ class Engine
 
 	// всй что связано с главным меню
 	void GameMenu();
+	void GamePlay();
 	
 
 	void input();

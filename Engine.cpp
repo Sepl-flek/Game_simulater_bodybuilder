@@ -14,7 +14,7 @@ void Engine::setTextStyle(sf::Text& text, float x, float y, float size, const sf
 
 void Engine::GameMenu()
 {
-	sf::RenderWindow window(sf::VideoMode::getDesktopMode(),  L"BodyBuilder", sf::Style::Fullscreen);
+	sf::RenderWindow window(sf::VideoMode::getDesktopMode(),  L"BodyBuilder",sf::Style::Fullscreen );
 	window.requestFocus();
 	window.setActive(true);
 	window.setMouseCursorVisible(false);
@@ -29,7 +29,8 @@ void Engine::GameMenu()
 
 	//Задний фон
 	sf::RectangleShape background(sf::Vector2f(width, heght));
-	
+	person.set_scale(5,5);
+	person.set_position(1250, 700);
 
 	background.setTexture(&AssetManager::GetTexture("image/menu.jpg"));
 
@@ -78,10 +79,93 @@ void Engine::GameMenu()
         window.clear();
         window.draw(background);
         window.draw(Titul);
-		
+		person.draw(window);
         mymenu.draw();
         window.display();
     }
+
+}
+
+void Engine::GamePlay()
+{
+	sf::RenderWindow window(sf::VideoMode::getDesktopMode(), L"BodyBuilder",sf::Style::Fullscreen);
+	window.requestFocus();
+	window.setActive(true);
+	window.setMouseCursorVisible(false);
+
+	sf::RectangleShape background(sf::Vector2f(width, heght));
+	background.setTexture(&AssetManager::GetTexture("image/background.jpg"));
+
+	person.set_scale(3, 3);
+	
+
+	float time;
+	sf::Clock clock;
+	const float parametr = 1;
+
+	sf::Vector2f moveRec;// запись о том где у нас сейчас корабль
+	while (window.isOpen())
+	{
+		time = clock.getElapsedTime().asMicroseconds();
+		time /= 3000;
+		clock.restart();
+
+
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+		
+			if (event.key.code == sf::Keyboard::Escape) { window.close(); }
+
+			switch (event.type)
+			{
+			case sf::Event::KeyPressed: // кнопка нажата
+				if ((event.key.code == sf::Keyboard::S)) {
+					moveRec.y = parametr * time;
+					
+				}
+				if ((event.key.code == sf::Keyboard::W)) {
+					moveRec.y = -parametr * time;
+					;
+				}
+				if ((event.key.code == sf::Keyboard::A)) {
+					moveRec.x = -parametr * time;
+
+				}
+				if ((event.key.code == sf::Keyboard::D)) {
+					moveRec.x = parametr * time;
+				}
+				break;
+
+
+			case sf::Event::KeyReleased: //кнопка отпущена 
+				if ((event.key.code == sf::Keyboard::S)) {
+					moveRec.y = 0;
+
+				}
+				if ((event.key.code == sf::Keyboard::W)) {
+					moveRec.y = 0;
+					
+				}
+				if ((event.key.code == sf::Keyboard::A)) {
+					moveRec.x = 0;
+				}
+				if ((event.key.code == sf::Keyboard::D)) {
+					moveRec.x = 0;
+				}
+				break;
+
+			default:
+				break;
+
+			}
+		}
+		person.move(moveRec, width, heght);
+		window.clear();
+		window.draw(background);
+		person.draw(window);
+		window.display();
+	}
 
 }
 
@@ -117,6 +201,7 @@ Engine::Engine()
 void Engine::run()
 {
 	GameMenu();
+	GamePlay();
 	sf::Clock clock;
 	
 	
