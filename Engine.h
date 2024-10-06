@@ -12,8 +12,8 @@ class Engine
 	Person person = Person(1);
 	
 	// возможные доработки ращрешения
-	std::unique_ptr<sf::RenderWindow> window = std::make_unique<sf::RenderWindow>(sf::VideoMode::getDesktopMode(),
-		L"БОДИБИЛДЕР", sf::Style::Fullscreen);
+	//std::unique_ptr<sf::RenderWindow> window = std::make_unique<sf::RenderWindow>(sf::VideoMode::getDesktopMode(),
+	//	L"БОДИБИЛДЕР", sf::Style::Fullscreen);
 
 	// главное меню
 	

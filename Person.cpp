@@ -16,14 +16,14 @@ void Person::move(sf::Vector2f move_rec, float wedth, float height)
 {
 	person.move(move_rec);
 	sf::Vector2f pos = person.getPosition();
-	if (pos.x > wedth) person.setPosition(wedth, pos.y);
+	if (pos.x > (wedth - 100)) person.setPosition(wedth - 100, pos.y);
 	if (pos.x < 50) person.setPosition(50, pos.y);
-	if (pos.y > (height - 100)) person.setPosition(pos.x, (height - 100));
+	if (pos.y > (height - 200)) person.setPosition(pos.x, (height - 200));
 	if (pos.y < 0) person.setPosition(pos.x, 0);
 
-	if (pos.x > wedth && pos.y > (height - 100)) person.setPosition(wedth, height - 100);
-	if (pos.x > wedth && pos.y < 0) person.setPosition(wedth, 0);
-	if (pos.x < 50 && pos.y > height) person.setPosition(50, height);
+	if (pos.x > (wedth - 100) && pos.y > (height - 200)) person.setPosition(wedth - 100, height - 200);
+	if (pos.x > (wedth - 100) && pos.y < 0) person.setPosition(wedth - 100, 0);
+	if (pos.x < 50 && pos.y > (height - 200)) person.setPosition(50,height - 200);
 	if (pos.x < 50 && pos.y < 0) person.setPosition(50, 0);
 
 }
@@ -64,8 +64,27 @@ void Person::animation(int trafic)
 		}
 		
 	}
-	if (trafic == 0) {
+	else if (trafic == 0) {
 		step_animation = 0;
 		person.setTextureRect(sf::IntRect(xsp[step_animation], ysp, widthsp[step_animation], heightsp));
+	}
+	else if (trafic == 2)
+	{
+		if (step_animation <= 1)
+		{
+			step_animation = 2;
+			person.setTextureRect(sf::IntRect(xspl[step_animation - 2], yspl, widthsp[step_animation], heightsp));
+			
+		}
+		if (12 > step_animation >= 1)
+		{
+			step_animation += 1;
+			person.setTextureRect(sf::IntRect(xspl[step_animation - 2], yspl, widthsp[step_animation], heightsp));
+		}
+		else
+		{
+			step_animation = 4;
+			person.setTextureRect(sf::IntRect(xspl[step_animation - 2], yspl, widthsp[step_animation], heightsp));
+		}
 	}
 }

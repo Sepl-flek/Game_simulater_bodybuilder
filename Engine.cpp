@@ -92,6 +92,7 @@ void Engine::GamePlay()
 	window.requestFocus();
 	window.setActive(true);
 	window.setMouseCursorVisible(false);
+	window.setVerticalSyncEnabled(true);
 
 	sf::RectangleShape background(sf::Vector2f(width, heght));
 	background.setTexture(&AssetManager::GetTexture("image/background.jpg"));
@@ -122,7 +123,7 @@ void Engine::GamePlay()
 			case sf::Event::KeyPressed: // кнопка нажата
 				if ((event.key.code == sf::Keyboard::S)) {
 					moveRec.y = parametr * time;
-					traffic = 1;
+					traffic = 2;
 
 				}
 				if ((event.key.code == sf::Keyboard::W)) {
@@ -131,7 +132,7 @@ void Engine::GamePlay()
 				}
 				if ((event.key.code == sf::Keyboard::A)) {
 					moveRec.x = -parametr * time;
-					traffic = 1;
+					traffic = 2;
 
 				}
 				if ((event.key.code == sf::Keyboard::D)) {
@@ -188,11 +189,12 @@ void Engine::GamePlay()
 
 void Engine::input()
 {
+	/*
 	sf::Event event_play;
 	while (window->pollEvent(event_play))
 	{
 		if (event_play.key.code == sf::Keyboard::Escape) { window->close(); }
-	}
+	}*/
 }
 
 void Engine::update(sf::Time const& deltaTime)
@@ -217,7 +219,7 @@ void Engine::run()
 	sf::Clock clock;
 	
 	
-	while (window->isOpen())
+	/*while (window->isOpen())
 	{
 		sf::Time dt = clock.restart();
 
@@ -226,7 +228,7 @@ void Engine::run()
 		update(dt);
 
 		draw();
-	}
+	}*/
 }
 
 
