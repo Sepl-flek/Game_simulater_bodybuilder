@@ -97,12 +97,12 @@ void Engine::GamePlay()
 	sf::RectangleShape background(sf::Vector2f(width, heght));
 	background.setTexture(&AssetManager::GetTexture("image/background.jpg"));
 
-	person.set_scale(3, 3);
+	person.set_scale(2, 2);
 	
 
 	float time;
 	sf::Clock clock, clockAnimPlay;
-	const float parametr = 1;
+	const float parametr = 0.5;
 	int traffic = 0; // вид анимации
 	sf::Vector2f moveRec;// запись о том где у нас сейчас корабль
 	while (window.isOpen())
