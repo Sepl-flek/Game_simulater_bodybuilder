@@ -5,6 +5,7 @@
 #include "GameMenu.h"
 #include <SFML/Audio.hpp>
 #include "Person.h"
+#include "Collision.h"
 class Engine
 {
 	AssetManager manager; // менеджер ресурсов

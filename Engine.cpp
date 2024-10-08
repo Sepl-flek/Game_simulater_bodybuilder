@@ -95,10 +95,19 @@ void Engine::GamePlay()
 	window.setVerticalSyncEnabled(true);
 
 	sf::RectangleShape background(sf::Vector2f(width, heght));
-	background.setTexture(&AssetManager::GetTexture("image/background.jpg"));
+	background.setTexture(&AssetManager::GetTexture("image/background5.png"));
+
+	sf::RectangleShape background2(sf::Vector2f(width, heght));
+	background2.setTexture(&AssetManager::GetTexture("image/background2.png"));
+	background2.setPosition(0, -heght);
 
 	person.set_scale(2, 2);
+	float scaleY = heght / 512; 
+	float scaleX = width / 512;
+	Collision home(0, 0, 192 * scaleX, 183 * scaleY);
+	Collision gym((512 - 32)*scaleX, 0, 32 * scaleX, 183 * scaleY);
 	
+	sf::Vector2f position = person.get_position();
 
 	float time;
 	sf::Clock clock, clockAnimPlay;
@@ -110,13 +119,16 @@ void Engine::GamePlay()
 		time = clock.getElapsedTime().asMicroseconds();
 		time /= 3000;
 		clock.restart();
-
+		if (!(home.collision(person) || gym.collision(person))) {
+			position = person.get_position();
+		}
 
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
 
 			if (event.key.code == sf::Keyboard::Escape) { window.close(); }
+			
 
 			switch (event.type)
 			{
@@ -166,13 +178,20 @@ void Engine::GamePlay()
 				break;
 
 			}
-
+			
+			
 		}
 		if (clockAnimPlay.getElapsedTime() > sf::milliseconds(100)) {
 			clockAnimPlay.restart();
 
 			person.animation(traffic);
 
+		}
+		
+
+		if ((home.collision(person) || gym.collision(person)))
+		{
+			person.set_position(position.x, position.y);
 		}
 
 		

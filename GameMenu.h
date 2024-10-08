@@ -8,11 +8,11 @@ namespace game {
 	public:
 		GameMenu(sf::RenderWindow& window, float menux, float menuy, int sizeFont, int step, std::vector<sf::String>& name);
 
-		void draw();                                     // отрисовка мен.
+		void draw();                                     // отрисовка меню
 
 		void MoveUp();									//перемещение меню вверх
 
-		void MoveDown();                                 // перемщеение меню вниз
+		void MoveDown();                                 // перемещение меню вниз
 
 
 		void setColorTextMenu(sf::Color menColor, sf::Color ChoColor); // цвет меню

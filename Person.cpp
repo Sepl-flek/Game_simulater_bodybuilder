@@ -3,7 +3,7 @@
 Person::Person(float scale)
 {
 	
-	person.setTexture(AssetManager::GetTexture("image/pperson.png"));
+	person.setTexture(AssetManager::GetTexture("image/pperson2.png"));
 	person.setTextureRect(sf::IntRect(xsp[0], ysp, widthsp[0], heightsp));
 	person.setPosition(1000, 1000);
 	person.setScale(scale, scale);
@@ -87,4 +87,14 @@ void Person::animation(int trafic)
 			person.setTextureRect(sf::IntRect(xspl[step_animation - 2], yspl, widthsp[step_animation], heightsp));
 		}
 	}
+}
+
+sf::Vector2f Person::get_position()
+{
+	return person.getPosition();
+}
+
+sf::FloatRect Person::get_global_bounds() const
+{
+	return person.getGlobalBounds();
 }
