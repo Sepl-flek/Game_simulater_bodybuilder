@@ -101,19 +101,25 @@ void Engine::GamePlay()
 	background2.setTexture(&AssetManager::GetTexture("image/background2.png"));
 	background2.setPosition(0, -heght);
 
+	// масштабы
 	person.set_scale(2, 2);
 	float scaleY = heght / 512; 
 	float scaleX = width / 512;
+
+	// коллизии
 	Collision home(0, 0, 192 * scaleX, 183 * scaleY);
 	Collision gym((512 - 32)*scaleX, 0, 32 * scaleX, 183 * scaleY);
+	Collision door(95 * scaleX, 166 * scaleY, 33 * scaleX, scaleY * 55);
 	
+	//вспомогательная фигня
 	sf::Vector2f position = person.get_position();
-
 	float time;
 	sf::Clock clock, clockAnimPlay;
 	const float parametr = 0.5;
 	int traffic = 0; // вид анимации
-	sf::Vector2f moveRec;// запись о том где у нас сейчас корабль
+	sf::Vector2f moveRec;// запись о том где у нас сейчас персонаж
+
+
 	while (window.isOpen())
 	{
 		time = clock.getElapsedTime().asMicroseconds();
@@ -194,10 +200,20 @@ void Engine::GamePlay()
 			person.set_position(position.x, position.y);
 		}
 
+		if (door.collision(person))
+		{
+			door.change_color(sf::Color::Yellow);
+		}
+		else
+		{
+			door.change_color(sf::Color(0,0,0,0));
+		}
+
 		
 		person.move(moveRec, width, heght);
 		window.clear();
 		window.draw(background);
+		window.draw(door.get_rect());
 		person.draw(window);
 		window.display();
 	}

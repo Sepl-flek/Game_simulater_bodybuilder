@@ -17,14 +17,14 @@ void Person::move(sf::Vector2f move_rec, float wedth, float height)
 	person.move(move_rec);
 	sf::Vector2f pos = person.getPosition();
 	if (pos.x > (wedth - 100)) person.setPosition(wedth - 100, pos.y);
-	if (pos.x < 50) person.setPosition(50, pos.y);
-	if (pos.y > (height - 200)) person.setPosition(pos.x, (height - 200));
+	if (pos.x < 10) person.setPosition(10, pos.y);
+	if (pos.y > (height - 100)) person.setPosition(pos.x, (height - 100));
 	if (pos.y < 0) person.setPosition(pos.x, 0);
 
-	if (pos.x > (wedth - 100) && pos.y > (height - 200)) person.setPosition(wedth - 100, height - 200);
+	if (pos.x > (wedth - 100) && pos.y > (height - 100)) person.setPosition(wedth - 100, height - 100);
 	if (pos.x > (wedth - 100) && pos.y < 0) person.setPosition(wedth - 100, 0);
-	if (pos.x < 50 && pos.y > (height - 200)) person.setPosition(50,height - 200);
-	if (pos.x < 50 && pos.y < 0) person.setPosition(50, 0);
+	if (pos.x < 10 && pos.y > (height - 100)) person.setPosition(10,height - 100);
+	if (pos.x < 10 && pos.y < 0) person.setPosition(10, 0);
 
 }
 
