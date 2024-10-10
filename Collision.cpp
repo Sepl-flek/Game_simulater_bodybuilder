@@ -4,7 +4,7 @@ Collision::Collision(float x, float y, float width, float height):x(x),y(y),widt
 {
 	collisia = sf::FloatRect(x, y, width, height);
 	rect = sf::RectangleShape( sf::Vector2f(width, height));
-	rect.setOutlineThickness(2);
+	rect.setOutlineThickness(5);
 	rect.setFillColor(sf::Color(0, 0, 0, 0));
 	rect.setPosition(x, y);
 }

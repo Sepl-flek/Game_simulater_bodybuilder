@@ -39,9 +39,10 @@ class Engine
 	void update(sf::Time const & deltaTime);
 	void draw();
 
-
+	
 public:
 	Engine();
 	void run();
+
 };
 

@@ -12,15 +12,33 @@ public:
 	void set_position(float x, float y);
 	void set_scale(float x, float y);
 	void draw(sf::RenderWindow& window); 
+	void draw_interface(sf::RenderWindow& window,float scaleX,float scaleY);
 	void animation(int trafic);
 	sf::Vector2f get_position();
 	sf::FloatRect get_global_bounds() const;
 
-private:
-	int money = 1000;
-	int lvl_sleep = 0;
-	int hunger = 0;
+	void update_hunger(int procant); // увеличить голод
+	void update_sleep(int procant); // увеличить желание спать 
 
+private:
+	// механики
+	int money = 1000;
+	int lvl_sleep = 0; // 100 - max
+	int hunger = 0; // 100 - max
+	int day = 1;
+	std::string daystr = "1";
+	
+	sf::Sprite meat;
+	sf::Sprite energy;
+	sf::RectangleShape rect_hunger = sf::RectangleShape(sf::Vector2f(200,50));
+	sf::RectangleShape rect_lvl_sleep = sf::RectangleShape(sf::Vector2f(200, 50));
+
+	sf::RectangleShape full_rect_hunger = sf::RectangleShape(sf::Vector2f(200, 50));
+	sf::RectangleShape full_rect_lvl_sleep = sf::RectangleShape(sf::Vector2f(200, 50));
+
+
+
+	// спрайты
 	sf::Sprite person;
 	int step_animation = 0;
 	std::vector<int> xsp{0,41,82,125,175,235,280,325,380,454,516,567,610};

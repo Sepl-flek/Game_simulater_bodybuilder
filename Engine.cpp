@@ -20,7 +20,7 @@ void Engine::GameMenu()
 	window.setMouseCursorVisible(false);
 
 
-	std::vector<sf::String> name_menu = { L"Play","Exit" };
+	std::vector<sf::String> name_menu = { L"Play","Load Game","Exit"};
 	game::GameMenu mymenu(window, 1250, 600, 100, 250, name_menu);
 	
 
@@ -68,6 +68,8 @@ void Engine::GameMenu()
                     case 0:  window.close(); return; break;
               
 					case 1: exit(0); break;
+
+					case 2: exit(0); break;
                     default:break;
                     }
                 } break;
@@ -95,7 +97,7 @@ void Engine::GamePlay()
 	window.setVerticalSyncEnabled(true);
 
 	sf::RectangleShape background(sf::Vector2f(width, heght));
-	background.setTexture(&AssetManager::GetTexture("image/background5.png"));
+	background.setTexture(&AssetManager::GetTexture("image/background2.png"));
 
 	sf::RectangleShape background2(sf::Vector2f(width, heght));
 	background2.setTexture(&AssetManager::GetTexture("image/background2.png"));
@@ -103,7 +105,7 @@ void Engine::GamePlay()
 
 	// масштабы
 	person.set_scale(2, 2);
-	float scaleY = heght / 512; 
+	float scaleY = heght / 512;
 	float scaleX = width / 512;
 
 	// коллизии
@@ -118,7 +120,7 @@ void Engine::GamePlay()
 	const float parametr = 0.5;
 	int traffic = 0; // вид анимации
 	sf::Vector2f moveRec;// запись о том где у нас сейчас персонаж
-
+	person.update_hunger(30);
 
 	while (window.isOpen())
 	{
@@ -211,10 +213,12 @@ void Engine::GamePlay()
 
 		
 		person.move(moveRec, width, heght);
+
 		window.clear();
 		window.draw(background);
 		window.draw(door.get_rect());
 		person.draw(window);
+		person.draw_interface(window,scaleX,scaleY);
 		window.display();
 	}
 
