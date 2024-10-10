@@ -1,5 +1,6 @@
 #pragma once
 #include "Person.h"
+#include <SFML/Audio.hpp>
 class Collision
 {
 public:

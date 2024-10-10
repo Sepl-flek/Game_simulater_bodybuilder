@@ -1,5 +1,5 @@
 #include "Engine.h"
-
+#include <iostream>
 
 
 
@@ -98,10 +98,10 @@ void Engine::GamePlay()
 
 	sf::RectangleShape background(sf::Vector2f(width, heght));
 	background.setTexture(&AssetManager::GetTexture("image/background2.png"));
+	bool is_scene_1 = true;
 
 	sf::RectangleShape background2(sf::Vector2f(width, heght));
-	background2.setTexture(&AssetManager::GetTexture("image/background2.png"));
-	background2.setPosition(0, -heght);
+	background2.setTexture(&AssetManager::GetTexture("image/background.png"));
 
 	// масштабы
 	person.set_scale(2, 2);
@@ -110,9 +110,18 @@ void Engine::GamePlay()
 
 	// коллизии
 	Collision home(0, 0, 192 * scaleX, 183 * scaleY);
-	Collision gym((512 - 32)*scaleX, 0, 32 * scaleX, 183 * scaleY);
-	Collision door(95 * scaleX, 166 * scaleY, 33 * scaleX, scaleY * 55);
+	Collision gym((512 - 32) * scaleX, 0, 32 * scaleX, 183 * scaleY);
+	Collision olimpia(0, 0, 512 * scaleX , 150 * scaleY);
+	Collision underground(449 * scaleX, 225 * scaleY, 63 * scaleX,10*scaleY);
+
+	//колизия дверей
+	Collision door_home(95 * scaleX, 166 * scaleY, 33 * scaleX, scaleY * 55);
+	Collision door_gym(475 * scaleX,145 * scaleY,35 * scaleX,22 * scaleY);
+	Collision door_work(475 * scaleX, 32 * scaleY, 35 * scaleX, 27 * scaleY);
 	
+
+	std::vector<Collision> collisions{ door_home,door_gym,door_work };
+
 	//вспомогательная фигня
 	sf::Vector2f position = person.get_position();
 	float time;
@@ -120,16 +129,26 @@ void Engine::GamePlay()
 	const float parametr = 0.5;
 	int traffic = 0; // вид анимации
 	sf::Vector2f moveRec;// запись о том где у нас сейчас персонаж
-	person.update_hunger(30);
+	
 
 	while (window.isOpen())
 	{
 		time = clock.getElapsedTime().asMicroseconds();
 		time /= 3000;
 		clock.restart();
-		if (!(home.collision(person) || gym.collision(person))) {
-			position = person.get_position();
+		if (is_scene_1) {
+			if (!(home.collision(person) || gym.collision(person))) {
+				position = person.get_position();
+			}
 		}
+		else
+		{
+			if (!(olimpia.collision(person) || underground.collision(person)))
+			{
+				position = person.get_position();
+			}
+		}
+		
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -196,30 +215,60 @@ void Engine::GamePlay()
 
 		}
 		
-
-		if ((home.collision(person) || gym.collision(person)))
+		if (is_scene_1 && position.y <= 5)
 		{
-			person.set_position(position.x, position.y);
+			is_scene_1 = false;
+			person.set_position(position.x, heght - 110);
 		}
-
-		if (door.collision(person))
+		else if (!is_scene_1 && position.y >= heght - 105)
 		{
-			door.change_color(sf::Color::Yellow);
+			is_scene_1 = true;
+			person.set_position(position.x, 5);
 		}
+		// background 1
+		if (is_scene_1)
+		{
+			if ((home.collision(person) || gym.collision(person))) { person.set_position(position.x, position.y); }
+
+			for (Collision& i : collisions) {
+				if (i.collision(person)) { i.change_color(sf::Color::Yellow); }
+				else { i.change_color(sf::Color(0, 0, 0, 0)); }
+			}
+
+
+			person.move(moveRec, width, heght);
+
+			window.clear();
+			window.draw(background);
+
+			for (Collision& i : collisions) {
+				window.draw(i.get_rect());
+			}
+
+
+			person.draw(window);
+			person.draw_interface(window, scaleX, scaleY);
+			window.display();
+		}
+		
+		//background 2
 		else
 		{
-			door.change_color(sf::Color(0,0,0,0));
+			person.move(moveRec, width, heght);
+			if (olimpia.collision(person) || underground.collision(person)) 
+			{ 
+				person.set_position(position.x, position.y); 
+			}
+
+			
+
+			window.clear();
+			window.draw(background2);
+
+			person.draw(window);
+			person.draw_interface(window, scaleX, scaleY);
+			window.display();
 		}
-
-		
-		person.move(moveRec, width, heght);
-
-		window.clear();
-		window.draw(background);
-		window.draw(door.get_rect());
-		person.draw(window);
-		person.draw_interface(window,scaleX,scaleY);
-		window.display();
 	}
 
 }
