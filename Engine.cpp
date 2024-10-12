@@ -19,11 +19,9 @@ void Engine::GameMenu()
 	window.setActive(true);
 	window.setMouseCursorVisible(false);
 
-
 	std::vector<sf::String> name_menu = { L"Play","Load Game","Exit"};
 	game::GameMenu mymenu(window, 1250, 600, 100, 250, name_menu);
 	
-
 	mymenu.setColorTextMenu(sf::Color(235, 78, 78), sf::Color::Yellow);
 	mymenu.AlignMenu(2);
 
@@ -112,15 +110,18 @@ void Engine::GamePlay()
 	Collision home(0, 0, 192 * scaleX, 183 * scaleY);
 	Collision gym((512 - 32) * scaleX, 0, 32 * scaleX, 183 * scaleY);
 	Collision olimpia(0, 0, 512 * scaleX , 150 * scaleY);
-	Collision underground(449 * scaleX, 225 * scaleY, 63 * scaleX,10*scaleY);
+	Collision underground(449 * scaleX, 225 * scaleY, 63 * scaleX,35*scaleY);
 
 	//колизия дверей
 	Collision door_home(95 * scaleX, 166 * scaleY, 33 * scaleX, scaleY * 55);
-	Collision door_gym(475 * scaleX,145 * scaleY,35 * scaleX,22 * scaleY);
-	Collision door_work(475 * scaleX, 32 * scaleY, 35 * scaleX, 27 * scaleY);
+	Collision door_gym(480 * scaleX,145 * scaleY,30 * scaleX,22 * scaleY);
+	Collision near_door_gym(475 * scaleX, 145 * scaleY, 15 * scaleX, 22 * scaleY);	
+	Collision door_work(480 * scaleX, 32 * scaleY, 30 * scaleX, 27 * scaleY);
+	Collision near_door_work(475 * scaleX, 32 * scaleY, 15 * scaleX, 27 * scaleY);
 	
-
+	//векторы колизий дверей
 	std::vector<Collision> collisions{ door_home,door_gym,door_work };
+	std::vector<Collision> near_collisions{ door_home,near_door_gym,near_door_work };
 
 	//вспомогательная фигня
 	sf::Vector2f position = person.get_position();
@@ -178,7 +179,12 @@ void Engine::GamePlay()
 					moveRec.x = parametr * time;
 					traffic = 1;
 				}
+				if (door_home.collision(person) && event.key.code == sf::Keyboard::E)
+				{
+					HomePlay(window, AssetManager::GetTexture("image/background2.png"));
+				}
 				break;
+				
 
 
 			case sf::Event::KeyReleased: //кнопка отпущена 
@@ -230,9 +236,9 @@ void Engine::GamePlay()
 		{
 			if ((home.collision(person) || gym.collision(person))) { person.set_position(position.x, position.y); }
 
-			for (Collision& i : collisions) {
-				if (i.collision(person)) { i.change_color(sf::Color::Yellow); }
-				else { i.change_color(sf::Color(0, 0, 0, 0)); }
+			for (int i = 0; i < collisions.size(); i++) {
+				if (near_collisions[i].collision(person)) { collisions[i].change_color(sf::Color::Yellow); }
+				else { collisions[i].change_color(sf::Color(0, 0, 0, 0)); }
 			}
 
 
@@ -241,8 +247,8 @@ void Engine::GamePlay()
 			window.clear();
 			window.draw(background);
 
-			for (Collision& i : collisions) {
-				window.draw(i.get_rect());
+			for (int i = 0; i < collisions.size(); i++) {
+				window.draw(collisions[i].get_rect());
 			}
 
 
@@ -272,6 +278,103 @@ void Engine::GamePlay()
 	}
 
 }
+
+void Engine::HomePlay(sf::RenderWindow& window, sf::Texture& background_t)
+{
+	sf::RectangleShape background(sf::Vector2f(width, heght));
+	background.setTexture(&AssetManager::GetTexture("image/home.png"));
+	float time;
+	sf::Clock clock, clockAnimPlay;
+	
+	const float parametr = 0.5;
+	int traffic = 0; // вид анимации
+	sf::Vector2f moveRec;// запись о том где у нас сейчас персонаж
+	
+	float scaleX = width / 512;
+	float scaleY = heght / 512;
+
+
+	while (window.isOpen())
+	{
+		time = clock.getElapsedTime().asMicroseconds();
+		time /= 3000;
+		clock.restart();
+		sf::Event event;
+		
+		while (window.pollEvent(event))
+		{
+
+			if (event.key.code == sf::Keyboard::Escape) { window.close(); }
+
+
+			switch (event.type)
+			{
+			case sf::Event::KeyPressed: // кнопка нажата
+				if ((event.key.code == sf::Keyboard::S)) {
+					moveRec.y = parametr * time;
+					traffic = 2;
+
+				}
+				if ((event.key.code == sf::Keyboard::W)) {
+					moveRec.y = -parametr * time;
+					traffic = 1;
+				}
+				if ((event.key.code == sf::Keyboard::A)) {
+					moveRec.x = -parametr * time;
+					traffic = 2;
+
+				}
+				if ((event.key.code == sf::Keyboard::D)) {
+					moveRec.x = parametr * time;
+					traffic = 1;
+				}
+				
+				break;
+
+
+
+			case sf::Event::KeyReleased: //кнопка отпущена 
+				if ((event.key.code == sf::Keyboard::S)) {
+					moveRec.y = 0;
+					traffic = 0;
+
+				}
+				if ((event.key.code == sf::Keyboard::W)) {
+					moveRec.y = 0;
+					traffic = 0;
+				}
+				if ((event.key.code == sf::Keyboard::A)) {
+					moveRec.x = 0;
+					traffic = 0;
+				}
+				if ((event.key.code == sf::Keyboard::D)) {
+					moveRec.x = 0;
+					traffic = 0;
+				}
+				break;
+
+			default:
+				break;
+
+			}
+		}
+		if (clockAnimPlay.getElapsedTime() > sf::milliseconds(100)) {
+			clockAnimPlay.restart();
+
+			person.animation(traffic);
+
+		}
+		person.move(moveRec, width, heght);
+
+
+		window.clear();
+		window.draw(background);
+		person.draw(window);
+		person.draw_interface(window, scaleX, scaleY);
+		window.display();
+	}
+}
+
 
 
 
