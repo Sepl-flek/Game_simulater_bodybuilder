@@ -302,9 +302,13 @@ void Engine::HomePlay(sf::RenderWindow& window)
 	float scaleX = width / 512;
 	float scaleY = heght / 512;
 	person.set_position(32*scaleX, 223 *scaleY);
+	Collision wall(0, 0, 23 * scaleX, heght);
+	Collision piano(41 * scaleX, 2, 96 * scaleX, 48 * scaleY);
+	Collision fridge(444 * scaleX, 0, 44 * scaleX, 22 * scaleY);
 
 	Collision door(0, 240 * scaleY, 23 * scaleX, 22 * scaleY);
 	Collision near_door(23 * scaleX, 240 * scaleY, 29 * scaleX, 26 * scaleY);
+	sf::Vector2f position = person.get_position();;
 
 	while (window.isOpen())
 	{
@@ -312,6 +316,8 @@ void Engine::HomePlay(sf::RenderWindow& window)
 		time /= 3000;
 		clock.restart();
 		sf::Event event;
+
+		if(!(wall.collision(person) && piano.collision(person) && fridge.collision(person))){ position = person.get_position(); }
 		
 		while (window.pollEvent(event))
 		{
@@ -392,7 +398,12 @@ void Engine::HomePlay(sf::RenderWindow& window)
 		{
 			door.change_color(sf::Color(0, 0, 0, 0));
 		}
+
 		person.move(moveRec, width, heght);
+		if (wall.collision(person) || piano.collision(person) || fridge.collision(person))
+		{
+			person.set_position(position.x, position.y);
+		}
 
 
 		window.clear();
