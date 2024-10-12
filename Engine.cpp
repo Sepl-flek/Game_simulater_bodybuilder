@@ -181,7 +181,8 @@ void Engine::GamePlay()
 				}
 				if (door_home.collision(person) && event.key.code == sf::Keyboard::E)
 				{
-					HomePlay(window, AssetManager::GetTexture("image/background2.png"));
+					HomePlay(window);
+					
 				}
 				break;
 				
@@ -279,12 +280,20 @@ void Engine::GamePlay()
 
 }
 
-void Engine::HomePlay(sf::RenderWindow& window, sf::Texture& background_t)
+void Engine::HomePlay(sf::RenderWindow& window)
 {
+	
 	sf::RectangleShape background(sf::Vector2f(width, heght));
+	background.setTexture(&AssetManager::GetTexture("image/black.png"));
+	window.clear();
+	window.draw(background);
+	window.display();
+	sf::sleep(sf::seconds(0.5));
 	background.setTexture(&AssetManager::GetTexture("image/home.png"));
 	float time;
 	sf::Clock clock, clockAnimPlay;
+	
+	
 	
 	const float parametr = 0.5;
 	int traffic = 0; // вид анимации
@@ -292,7 +301,10 @@ void Engine::HomePlay(sf::RenderWindow& window, sf::Texture& background_t)
 	
 	float scaleX = width / 512;
 	float scaleY = heght / 512;
+	person.set_position(32*scaleX, 223 *scaleY);
 
+	Collision door(0, 240 * scaleY, 23 * scaleX, 22 * scaleY);
+	Collision near_door(23 * scaleX, 240 * scaleY, 29 * scaleX, 26 * scaleY);
 
 	while (window.isOpen())
 	{
@@ -327,6 +339,13 @@ void Engine::HomePlay(sf::RenderWindow& window, sf::Texture& background_t)
 				if ((event.key.code == sf::Keyboard::D)) {
 					moveRec.x = parametr * time;
 					traffic = 1;
+				}
+				if ((near_door.collision(person) && (event.key.code == sf::Keyboard::E))) 
+				{
+					background.setTexture(&AssetManager::GetTexture("image/background2.png"));
+					person.set_position(99 * scaleX, 185 * scaleY);
+			
+					return;
 				}
 				
 				break;
@@ -364,11 +383,21 @@ void Engine::HomePlay(sf::RenderWindow& window, sf::Texture& background_t)
 			person.animation(traffic);
 
 		}
+
+		if (near_door.collision(person))
+		{
+			door.change_color(sf::Color::Yellow);
+		}
+		else
+		{
+			door.change_color(sf::Color(0, 0, 0, 0));
+		}
 		person.move(moveRec, width, heght);
 
 
 		window.clear();
 		window.draw(background);
+		window.draw(door.get_rect());
 		person.draw(window);
 		person.draw_interface(window, scaleX, scaleY);
 		window.display();

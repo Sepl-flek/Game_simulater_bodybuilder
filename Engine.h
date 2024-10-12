@@ -33,7 +33,7 @@ class Engine
 	// всй что связано с главным меню
 	void GameMenu();
 	void GamePlay();
-	void HomePlay(sf::RenderWindow& window,sf::Texture& background_t);
+	void HomePlay(sf::RenderWindow& window);
 	
 
 	void input();
