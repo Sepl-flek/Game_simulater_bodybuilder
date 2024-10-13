@@ -305,6 +305,12 @@ void Engine::HomePlay(sf::RenderWindow& window)
 	Collision wall(0, 0, 23 * scaleX, heght);
 	Collision piano(41 * scaleX, 2, 96 * scaleX, 48 * scaleY);
 	Collision fridge(444 * scaleX, 0, 44 * scaleX, 22 * scaleY);
+	Collision bed(41 * scaleX, 443 * scaleY, 95 * scaleX, 66 * scaleY);
+	Collision table(230 * scaleX, 10 * scaleY, 97 * scaleX, 57 * scaleY);
+	Collision arcade(463 * scaleX, 187 * scaleY, 49 * scaleX, 27 * scaleY);
+	Collision wardrobe(445 * scaleX, 427 * scaleY, 65 * scaleX, 81 * scaleY);
+	Collision near_bed(40 * scaleX, 422 * scaleY, 121 *scaleX, 88 *scaleY);
+	Collision full_fridge(442 * scaleX, 0, 47 * scaleX, 63 * scaleY);
 
 	Collision door(0, 240 * scaleY, 23 * scaleX, 22 * scaleY);
 	Collision near_door(23 * scaleX, 240 * scaleY, 29 * scaleX, 26 * scaleY);
@@ -317,7 +323,9 @@ void Engine::HomePlay(sf::RenderWindow& window)
 		clock.restart();
 		sf::Event event;
 
-		if(!(wall.collision(person) && piano.collision(person) && fridge.collision(person))){ position = person.get_position(); }
+		if(!(wall.collision(person) && piano.collision(person) 
+			&& fridge.collision(person) && bed.collision(person) 
+			&& table.collision(person) && arcade.collision(person) && wardrobe.collision(person))){ position = person.get_position(); }
 		
 		while (window.pollEvent(event))
 		{
@@ -348,6 +356,11 @@ void Engine::HomePlay(sf::RenderWindow& window)
 				}
 				if ((near_door.collision(person) && (event.key.code == sf::Keyboard::E))) 
 				{
+					background.setTexture(&AssetManager::GetTexture("image/black.png"));
+					window.clear();
+					window.draw(background);
+					window.display();
+					sf::sleep(sf::seconds(0.5));
 					background.setTexture(&AssetManager::GetTexture("image/background2.png"));
 					person.set_position(99 * scaleX, 185 * scaleY);
 			
@@ -400,15 +413,26 @@ void Engine::HomePlay(sf::RenderWindow& window)
 		}
 
 		person.move(moveRec, width, heght);
-		if (wall.collision(person) || piano.collision(person) || fridge.collision(person))
+		// коллизии 
+		if (wall.collision(person) || piano.collision(person) 
+			|| fridge.collision(person) || bed.collision(person) 
+			|| table.collision(person) || arcade.collision(person) || wardrobe.collision(person))
 		{
 			person.set_position(position.x, position.y);
 		}
+
+		if (near_bed.collision(person)) { bed.change_color(sf::Color::Yellow); }
+		else { bed.change_color(sf::Color(0, 0, 0, 0)); }
+
+		if (full_fridge.collision(person)) { full_fridge.change_color(sf::Color::Yellow); }
+		else { full_fridge.change_color(sf::Color(0, 0, 0, 0)); }
 
 
 		window.clear();
 		window.draw(background);
 		window.draw(door.get_rect());
+		window.draw(full_fridge.get_rect());
+		window.draw(bed.get_rect());
 		person.draw(window);
 		person.draw_interface(window, scaleX, scaleY);
 		window.display();
