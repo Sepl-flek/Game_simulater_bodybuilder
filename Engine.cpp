@@ -4,6 +4,7 @@
 
 
 
+
 void Engine::setTextStyle(sf::Text& text, float x, float y, float size, const sf::Color& color,const std::string& content)
 {
 	text.setPosition(x, y);
@@ -111,7 +112,8 @@ void Engine::GamePlay()
 	Collision gym((512 - 32) * scaleX, 0, 32 * scaleX, 183 * scaleY);
 	Collision olimpia(0, 0, 512 * scaleX , 150 * scaleY);
 	Collision underground(449 * scaleX, 225 * scaleY, 63 * scaleX,35*scaleY);
-
+	Collision home_scene_2(0, 510 * scaleY, scaleX * 191, 3 * scaleY);
+	Collision gym_scene_2(480 * scaleX, 510 * scaleY, 32 * scaleX, 3 * scaleY);
 	//колизия дверей
 	Collision door_home(95 * scaleX, 166 * scaleY, 33 * scaleX, scaleY * 55);
 	Collision door_gym(480 * scaleX,145 * scaleY,30 * scaleX,22 * scaleY);
@@ -127,7 +129,7 @@ void Engine::GamePlay()
 	sf::Vector2f position = person.get_position();
 	float time;
 	sf::Clock clock, clockAnimPlay;
-	const float parametr = 0.5;
+	const float parametr = 2;
 	int traffic = 0; // вид анимации
 	sf::Vector2f moveRec;// запись о том где у нас сейчас персонаж
 	
@@ -144,7 +146,7 @@ void Engine::GamePlay()
 		}
 		else
 		{
-			if (!(olimpia.collision(person) || underground.collision(person)))
+			if (!(olimpia.collision(person) || underground.collision(person) || home_scene_2.collision(person) || gym_scene_2.collision(person)))
 			{
 				position = person.get_position();
 			}
@@ -262,7 +264,7 @@ void Engine::GamePlay()
 		else
 		{
 			person.move(moveRec, width, heght);
-			if (olimpia.collision(person) || underground.collision(person)) 
+			if (olimpia.collision(person) || underground.collision(person) || home_scene_2.collision(person) || gym_scene_2.collision(person)) 
 			{ 
 				person.set_position(position.x, position.y); 
 			}
@@ -293,9 +295,12 @@ void Engine::HomePlay(sf::RenderWindow& window)
 	float time;
 	sf::Clock clock, clockAnimPlay;
 	
+	person.set_scale(3, 3);
+
+	std::vector<Food> foods;
+
 	
-	
-	const float parametr = 0.5;
+	const float parametr = 2;
 	int traffic = 0; // вид анимации
 	sf::Vector2f moveRec;// запись о том где у нас сейчас персонаж
 	
@@ -310,7 +315,7 @@ void Engine::HomePlay(sf::RenderWindow& window)
 	Collision arcade(463 * scaleX, 187 * scaleY, 49 * scaleX, 27 * scaleY);
 	Collision wardrobe(445 * scaleX, 427 * scaleY, 65 * scaleX, 81 * scaleY);
 	Collision near_bed(40 * scaleX, 422 * scaleY, 121 *scaleX, 88 *scaleY);
-	Collision full_fridge(442 * scaleX, 0, 47 * scaleX, 63 * scaleY);
+	Collision full_fridge(445 * scaleX, 2, 45 * scaleX, 57 * scaleY);
 
 	Collision door(0, 240 * scaleY, 23 * scaleX, 22 * scaleY);
 	Collision near_door(23 * scaleX, 240 * scaleY, 29 * scaleX, 26 * scaleY);
@@ -363,6 +368,7 @@ void Engine::HomePlay(sf::RenderWindow& window)
 					sf::sleep(sf::seconds(0.5));
 					background.setTexture(&AssetManager::GetTexture("image/background2.png"));
 					person.set_position(99 * scaleX, 185 * scaleY);
+					person.set_scale(2, 2);
 			
 					return;
 				}
@@ -439,9 +445,6 @@ void Engine::HomePlay(sf::RenderWindow& window)
 	}
 }
 
-
-
-
 void Engine::input()
 {
 	/*
@@ -485,6 +488,3 @@ void Engine::run()
 		draw();
 	}*/
 }
-
-
-

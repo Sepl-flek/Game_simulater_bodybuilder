@@ -6,6 +6,7 @@
 #include <SFML/Audio.hpp>
 #include "Person.h"
 #include "Collision.h"
+#include "Food.h"
 class Engine
 {
 	AssetManager manager; // менеджер ресурсов
