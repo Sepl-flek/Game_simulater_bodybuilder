@@ -27,7 +27,7 @@ void Engine::GameMenu()
 	mymenu.AlignMenu(2);
 
 	//Задний фон
-	sf::RectangleShape background(sf::Vector2f(width, heght));
+	sf::RectangleShape background(sf::Vector2f(width, height));
 	person.set_scale(5,5);
 	person.set_position(1250, 700);
 
@@ -95,16 +95,16 @@ void Engine::GamePlay()
 	window.setMouseCursorVisible(false);
 	window.setVerticalSyncEnabled(true);
 
-	sf::RectangleShape background(sf::Vector2f(width, heght));
+	sf::RectangleShape background(sf::Vector2f(width, height));
 	background.setTexture(&AssetManager::GetTexture("image/background2.png"));
 	bool is_scene_1 = true;
 
-	sf::RectangleShape background2(sf::Vector2f(width, heght));
+	sf::RectangleShape background2(sf::Vector2f(width, height));
 	background2.setTexture(&AssetManager::GetTexture("image/background.png"));
 
 	// масштабы
 	person.set_scale(2, 2);
-	float scaleY = heght / 512;
+	float scaleY = height / 512;
 	float scaleX = width / 512;
 
 	// коллизии
@@ -227,9 +227,9 @@ void Engine::GamePlay()
 		if (is_scene_1 && position.y <= 5)
 		{
 			is_scene_1 = false;
-			person.set_position(position.x, heght - 110);
+			person.set_position(position.x, height - 110);
 		}
-		else if (!is_scene_1 && position.y >= heght - 105)
+		else if (!is_scene_1 && position.y >= height - 105)
 		{
 			is_scene_1 = true;
 			person.set_position(position.x, 5);
@@ -245,7 +245,7 @@ void Engine::GamePlay()
 			}
 
 
-			person.move(moveRec, width, heght);
+			person.move(moveRec, width, height);
 
 			window.clear();
 			window.draw(background);
@@ -263,7 +263,7 @@ void Engine::GamePlay()
 		//background 2
 		else
 		{
-			person.move(moveRec, width, heght);
+			person.move(moveRec, width, height);
 			if (olimpia.collision(person) || underground.collision(person) || home_scene_2.collision(person) || gym_scene_2.collision(person)) 
 			{ 
 				person.set_position(position.x, position.y); 
@@ -285,7 +285,7 @@ void Engine::GamePlay()
 void Engine::HomePlay(sf::RenderWindow& window)
 {
 	
-	sf::RectangleShape background(sf::Vector2f(width, heght));
+	sf::RectangleShape background(sf::Vector2f(width, height));
 	background.setTexture(&AssetManager::GetTexture("image/black.png"));
 	window.clear();
 	window.draw(background);
@@ -297,17 +297,14 @@ void Engine::HomePlay(sf::RenderWindow& window)
 	
 	person.set_scale(3, 3);
 
-	std::vector<Food> foods;
-
-	
 	const float parametr = 2;
 	int traffic = 0; // вид анимации
 	sf::Vector2f moveRec;// запись о том где у нас сейчас персонаж
 	
 	float scaleX = width / 512;
-	float scaleY = heght / 512;
+	float scaleY = height / 512;
 	person.set_position(32*scaleX, 223 *scaleY);
-	Collision wall(0, 0, 23 * scaleX, heght);
+	Collision wall(0, 0, 23 * scaleX, height);
 	Collision piano(41 * scaleX, 2, 96 * scaleX, 48 * scaleY);
 	Collision fridge(444 * scaleX, 0, 44 * scaleX, 22 * scaleY);
 	Collision bed(41 * scaleX, 443 * scaleY, 95 * scaleX, 66 * scaleY);
@@ -372,6 +369,10 @@ void Engine::HomePlay(sf::RenderWindow& window)
 			
 					return;
 				}
+				if (full_fridge.collision(person) && (event.key.code == sf::Keyboard::E))
+				{
+					FridgePlay(window);
+				}
 				
 				break;
 
@@ -418,7 +419,7 @@ void Engine::HomePlay(sf::RenderWindow& window)
 			door.change_color(sf::Color(0, 0, 0, 0));
 		}
 
-		person.move(moveRec, width, heght);
+		person.move(moveRec, width, height);
 		// коллизии 
 		if (wall.collision(person) || piano.collision(person) 
 			|| fridge.collision(person) || bed.collision(person) 
@@ -443,6 +444,131 @@ void Engine::HomePlay(sf::RenderWindow& window)
 		person.draw_interface(window, scaleX, scaleY);
 		window.display();
 	}
+}
+
+void Engine::FridgePlay(sf::RenderWindow& window)
+{
+	float scaleX = width / 512;
+	float scaleY = height / 512;
+	Food burger(84, 128, sf::Vector2f(102 * scaleX,132 * scaleY), "image/foods.png", 20, scaleY,scaleY);
+	Food chiken(200, 125, sf::Vector2f(216 * scaleX,133 * scaleY), "image/foods.png", 20, scaleY, scaleY);
+	Food chees(310, 126, sf::Vector2f(347 * scaleX,132 * scaleY), "image/foods.png", 20, scaleY, scaleY);
+	Food fish(84, 230, sf::Vector2f(102 * scaleX,262 * scaleY), "image/foods.png", 20, scaleY, scaleY);
+	Food ogrizok(197, 231, sf::Vector2f(216 * scaleX,262 * scaleY), "image/foods.png", 20, scaleY, scaleY);
+	Food wine(312, 230, sf::Vector2f(347* scaleX,262*scaleY), "image/foods.png", 20, scaleY, scaleY);
+	std::vector<std::vector<Food>> foods = { {burger,chiken,chees},{fish,ogrizok,wine} };
+	int h = foods.size(),w = foods[0].size();
+	sf::RectangleShape background(sf::Vector2f(width, height));
+	background.setTexture(&AssetManager::GetTexture("image/fridge.png"));
+
+	int heght = 0, wedth = 0;
+	sf::Sound sound_next;
+	sound_next.setBuffer(AssetManager::GetSoundBuffer("sound/audiomenu2.wav"));
+	sf::Sound enter;
+	enter.setBuffer(AssetManager::GetSoundBuffer("sound/eating.wav"));
+
+
+	while (window.isOpen())
+	{
+
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.key.code == sf::Keyboard::Escape) { return; }
+			switch (event.type)
+			{
+			case sf::Event::KeyReleased:
+				if (event.key.code == sf::Keyboard::Up) {
+					sound_next.play();
+					heght--;
+					if (heght < 0)
+					{
+						foods[0][wedth].change_color(sf::Color(0, 0, 0, 0));
+						heght = h - 1;
+						foods[heght][wedth].change_color(sf::Color::Yellow);
+					}
+					else
+					{
+						foods[heght + 1][wedth].change_color(sf::Color(0, 0, 0, 0));
+						foods[heght][wedth].change_color(sf::Color::Yellow);
+					}
+					break;
+				}
+				if (event.key.code == sf::Keyboard::Down) { 
+					sound_next.play();
+					heght++;
+					if (heght < h)
+					{
+						foods[heght - 1][wedth].change_color(sf::Color(0, 0, 0, 0));
+						foods[heght][wedth].change_color(sf::Color::Yellow);
+					}
+					else
+					{
+						foods[heght - 1][wedth].change_color(sf::Color(0, 0, 0, 0));
+						heght = 0;
+						foods[heght][wedth].change_color(sf::Color::Yellow);
+					}
+					break; 
+				}
+				if (event.key.code == sf::Keyboard::Right) {
+					sound_next.play();
+					wedth++;
+					if (wedth < w)
+					{
+						foods[heght][wedth - 1].change_color(sf::Color(0, 0, 0, 0));
+						foods[heght][wedth].change_color(sf::Color::Yellow);
+					}
+					else
+					{
+						foods[heght][wedth - 1].change_color(sf::Color(0, 0, 0, 0));
+						wedth = 0;
+						foods[heght][wedth].change_color(sf::Color::Yellow);
+					}
+					break;
+				}
+				if (event.key.code == sf::Keyboard::Left) {
+					sound_next.play();
+					wedth--;
+					if (wedth < 0)
+					{
+						foods[heght][0].change_color(sf::Color(0, 0, 0, 0));
+						wedth = w - 1;
+						foods[heght][wedth].change_color(sf::Color::Yellow);
+					}
+					else
+					{
+						foods[heght][wedth + 1].change_color(sf::Color(0, 0, 0, 0));
+						foods[heght][wedth].change_color(sf::Color::Yellow);
+						
+					}
+					break;
+				}
+				if (event.key.code == sf::Keyboard::Return)
+				{
+					enter.play();
+					while (enter.getStatus() == sf::Sound::Playing) {
+						sf::sleep(sf::microseconds(100));
+					}
+
+					return;
+				} break;
+			default:break;
+			}
+		}
+
+		window.clear();
+		window.draw(background);
+		for (int i = 0; i < h; ++i) {
+			for (int j = 0; j < w; ++j) {
+				foods[i][j].draw(window);
+			}
+		}
+		
+		foods[0][0].draw(window);
+		window.display();
+	}
+	
+
 }
 
 void Engine::input()

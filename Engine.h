@@ -22,7 +22,7 @@ class Engine
 	sf::RectangleShape background = sf::RectangleShape(
 	sf::Vector2f(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height));
 	float width = sf::VideoMode::getDesktopMode().width;
-	float heght = sf::VideoMode::getDesktopMode().height;
+	float height = sf::VideoMode::getDesktopMode().height;
 
 	//Текст для главного Экрана
 
@@ -35,6 +35,7 @@ class Engine
 	void GameMenu();
 	void GamePlay();
 	void HomePlay(sf::RenderWindow& window);
+	void FridgePlay(sf::RenderWindow& window);
 	
 
 	void input();
