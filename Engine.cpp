@@ -88,13 +88,19 @@ void Engine::GameMenu()
 }
 
 void Engine::GamePlay()
-{
+{	
 	sf::RenderWindow window(sf::VideoMode::getDesktopMode(), L"BodyBuilder",sf::Style::Fullscreen);
 	window.requestFocus();
 	window.setActive(true);
 	window.setMouseCursorVisible(false);
 	window.setVerticalSyncEnabled(true);
-
+	sf::Text text;
+	text.setFont(AssetManager::GetFont("font/mainmenu.otf")); // Устанавливаем шрифт
+	text.setCharacterSize(50); // Размер шрифта
+	text.setFillColor(sf::Color::White); // Цвет текста
+	
+	
+	
 	sf::RectangleShape background(sf::Vector2f(width, height));
 	background.setTexture(&AssetManager::GetTexture("image/background2.png"));
 	bool is_scene_1 = true;
@@ -106,7 +112,7 @@ void Engine::GamePlay()
 	person.set_scale(2, 2);
 	float scaleY = height / 512;
 	float scaleX = width / 512;
-
+	text.setPosition(10 * scaleX, 10 * scaleY);
 	// коллизии
 	Collision home(0, 0, 192 * scaleX, 183 * scaleY);
 	Collision gym((512 - 32) * scaleX, 0, 32 * scaleX, 183 * scaleY);
@@ -132,6 +138,7 @@ void Engine::GamePlay()
 	const float parametr = 2;
 	int traffic = 0; // вид анимации
 	sf::Vector2f moveRec;// запись о том где у нас сейчас персонаж
+
 	
 
 	while (window.isOpen())
@@ -234,6 +241,7 @@ void Engine::GamePlay()
 			is_scene_1 = true;
 			person.set_position(position.x, 5);
 		}
+		text.setString("Money: " + std::to_string(person.get_money()));
 		// background 1
 		if (is_scene_1)
 		{
@@ -257,6 +265,7 @@ void Engine::GamePlay()
 
 			person.draw(window);
 			person.draw_interface(window, scaleX, scaleY);
+			window.draw(text);
 			window.display();
 		}
 		
@@ -276,6 +285,7 @@ void Engine::GamePlay()
 
 			person.draw(window);
 			person.draw_interface(window, scaleX, scaleY);
+			window.draw(text);
 			window.display();
 		}
 	}
@@ -295,6 +305,7 @@ void Engine::HomePlay(sf::RenderWindow& window)
 	float time;
 	sf::Clock clock, clockAnimPlay;
 	
+	
 	person.set_scale(3, 3);
 
 	const float parametr = 2;
@@ -303,6 +314,13 @@ void Engine::HomePlay(sf::RenderWindow& window)
 	
 	float scaleX = width / 512;
 	float scaleY = height / 512;
+
+	sf::Text text;
+	text.setFont(AssetManager::GetFont("font/mainmenu.otf")); // Устанавливаем шрифт
+	text.setCharacterSize(50); // Размер шрифта
+	text.setFillColor(sf::Color::White); // Цвет текста
+	text.setPosition(10 * scaleX, 10 * scaleY);
+
 	person.set_position(32*scaleX, 223 *scaleY);
 	Collision wall(0, 0, 23 * scaleX, height);
 	Collision piano(41 * scaleX, 2, 96 * scaleX, 48 * scaleY);
@@ -371,12 +389,13 @@ void Engine::HomePlay(sf::RenderWindow& window)
 				}
 				if (full_fridge.collision(person) && (event.key.code == sf::Keyboard::E))
 				{
-					FridgePlay(window);
+					if (person.get_hunger())
+					{
+						FridgePlay(window);
+					}
 				}
 				
 				break;
-
-
 
 			case sf::Event::KeyReleased: //кнопка отпущена 
 				if ((event.key.code == sf::Keyboard::S)) {
@@ -433,7 +452,7 @@ void Engine::HomePlay(sf::RenderWindow& window)
 
 		if (full_fridge.collision(person)) { full_fridge.change_color(sf::Color::Yellow); }
 		else { full_fridge.change_color(sf::Color(0, 0, 0, 0)); }
-
+		text.setString("Money: " + std::to_string(person.get_money()));
 
 		window.clear();
 		window.draw(background);
@@ -441,6 +460,7 @@ void Engine::HomePlay(sf::RenderWindow& window)
 		window.draw(full_fridge.get_rect());
 		window.draw(bed.get_rect());
 		person.draw(window);
+		window.draw(text);
 		person.draw_interface(window, scaleX, scaleY);
 		window.display();
 	}
@@ -450,12 +470,12 @@ void Engine::FridgePlay(sf::RenderWindow& window)
 {
 	float scaleX = width / 512;
 	float scaleY = height / 512;
-	Food burger(84, 128, sf::Vector2f(102 * scaleX,132 * scaleY), "image/foods.png", 20, scaleY,scaleY);
-	Food chiken(200, 125, sf::Vector2f(216 * scaleX,133 * scaleY), "image/foods.png", 20, scaleY, scaleY);
-	Food chees(310, 126, sf::Vector2f(347 * scaleX,132 * scaleY), "image/foods.png", 20, scaleY, scaleY);
-	Food fish(84, 230, sf::Vector2f(102 * scaleX,262 * scaleY), "image/foods.png", 20, scaleY, scaleY);
-	Food ogrizok(197, 231, sf::Vector2f(216 * scaleX,262 * scaleY), "image/foods.png", 20, scaleY, scaleY);
-	Food wine(312, 230, sf::Vector2f(347* scaleX,262*scaleY), "image/foods.png", 20, scaleY, scaleY);
+	Food burger(84, 128, sf::Vector2f(102 * scaleX,132 * scaleY), "image/foods.png", 20, scaleY,scaleY,30);
+	Food chiken(200, 125, sf::Vector2f(216 * scaleX,133 * scaleY), "image/foods.png", 20, scaleY, scaleY,25);
+	Food chees(310, 126, sf::Vector2f(347 * scaleX,132 * scaleY), "image/foods.png", 20, scaleY, scaleY,15);
+	Food fish(84, 230, sf::Vector2f(102 * scaleX,262 * scaleY), "image/foods.png", 20, scaleY, scaleY,13);
+	Food ogrizok(197, 231, sf::Vector2f(216 * scaleX,262 * scaleY), "image/foods.png", 20, scaleY, scaleY,7);
+	Food wine(312, 230, sf::Vector2f(347* scaleX,262*scaleY), "image/foods.png", 20, scaleY, scaleY,1);
 	std::vector<std::vector<Food>> foods = { {burger,chiken,chees},{fish,ogrizok,wine} };
 	int h = foods.size(),w = foods[0].size();
 	sf::RectangleShape background(sf::Vector2f(width, height));
@@ -545,6 +565,8 @@ void Engine::FridgePlay(sf::RenderWindow& window)
 				}
 				if (event.key.code == sf::Keyboard::Return)
 				{
+					person.update_hunger(-foods[heght][wedth].get_satiety());
+					person.update_money(foods[heght][wedth].get_coast());
 					enter.play();
 					while (enter.getStatus() == sf::Sound::Playing) {
 						sf::sleep(sf::microseconds(100));
@@ -573,12 +595,7 @@ void Engine::FridgePlay(sf::RenderWindow& window)
 
 void Engine::input()
 {
-	/*
-	sf::Event event_play;
-	while (window->pollEvent(event_play))
-	{
-		if (event_play.key.code == sf::Keyboard::Escape) { window->close(); }
-	}*/
+	
 }
 
 void Engine::update(sf::Time const& deltaTime)

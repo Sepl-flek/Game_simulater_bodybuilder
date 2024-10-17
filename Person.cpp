@@ -139,8 +139,8 @@ void Person::update_hunger(int procant)
 {
 
 	hunger += procant;
-	//if (hunger > 100) {hunger = 100;}
-	//if (hunger < 0) { hunger = 0; }
+	if (hunger > 100) {hunger = 100;}
+	if (hunger < 0) { hunger = 0; }
 	
 	full_rect_hunger.setSize(sf::Vector2f(200 - hunger * 2,50));
 }
@@ -152,3 +152,24 @@ void Person::update_sleep(int procant)
 	if (lvl_sleep < 0) lvl_sleep = 0;
 	full_rect_lvl_sleep.setSize(sf::Vector2f(200 + lvl_sleep * 2, 50));
 }
+
+void Person::update_money(int coast)
+{
+	money -= coast;
+}
+
+int Person::get_hunger()
+{
+	return hunger;
+}
+
+int Person::get_money()
+{
+	return money;
+}
+
+int Person::get_lvl_sleep()
+{
+	return lvl_sleep;
+}
+

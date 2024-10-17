@@ -2,6 +2,10 @@
 #include<SFML/Graphics.hpp>
 #include <memory>
 #include "AssetManager.h"
+#include <string>
+
+
+
 class Person
 {
 public:
@@ -18,7 +22,12 @@ public:
 	sf::FloatRect get_global_bounds() const;
 
 	void update_hunger(int procant); // увеличить голод
-	void update_sleep(int procant); // увеличить желание спать 
+	void update_sleep(int procant); // увеличить желание спать
+	void update_money(int coast);
+	int get_hunger();
+	int get_money();
+	int get_lvl_sleep();
+
 
 private:
 	// механики

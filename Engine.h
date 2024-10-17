@@ -25,7 +25,7 @@ class Engine
 	float height = sf::VideoMode::getDesktopMode().height;
 
 	//Текст для главного Экрана
-
+	sf::Text text;
 	
 	void setTextStyle(sf::Text& text, float x, float y, float size,const sf::Color &color, const std::string& content);
 

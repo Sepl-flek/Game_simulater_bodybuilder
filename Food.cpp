@@ -1,6 +1,7 @@
 #include "Food.h"
 
-Food::Food(float x, float y, sf::Vector2f position, std::string texture, int coast, float scaleX, float scaleY, float width,float height): coast(coast)
+Food::Food(float x, float y, sf::Vector2f position, std::string texture, int coast, float scaleX, float scaleY, int satiety, float width,float height):
+	coast(coast),satiety(satiety)
 {
 	food.setTexture(AssetManager::GetTexture(texture));
 	food.setTextureRect(sf::IntRect(x, y, width, height));
@@ -23,4 +24,14 @@ void Food::draw(sf::RenderWindow& window)
 void Food::change_color(sf::Color color)
 {
 	border.setOutlineColor(color);
+}
+
+int Food::get_coast()
+{
+	return coast;
+}
+
+int Food::get_satiety()
+{
+	return satiety;
 }
