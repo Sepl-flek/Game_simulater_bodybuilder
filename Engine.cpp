@@ -98,8 +98,19 @@ void Engine::GamePlay()
 	text.setFont(AssetManager::GetFont("font/mainmenu.otf")); // Устанавливаем шрифт
 	text.setCharacterSize(50); // Размер шрифта
 	text.setFillColor(sf::Color::White); // Цвет текста
+	sf::Text day;
+	day.setFont(AssetManager::GetFont("font/mainmenu.otf")); // Устанавливаем шрифт
+	day.setCharacterSize(50); // Размер шрифта
+	day.setFillColor(sf::Color::White); // Цвет текста
 	
+	backgroundmusic.openFromFile("sound/Gameplay.wav");
+
+	backgroundmusic.setVolume(20);
+	backgroundmusic.setLoop(true);
+	backgroundmusic.play();
 	
+	person.update_sleep(100);
+	person.update_hunger(30);
 	
 	sf::RectangleShape background(sf::Vector2f(width, height));
 	background.setTexture(&AssetManager::GetTexture("image/background2.png"));
@@ -113,6 +124,7 @@ void Engine::GamePlay()
 	float scaleY = height / 512;
 	float scaleX = width / 512;
 	text.setPosition(10 * scaleX, 10 * scaleY);
+	day.setPosition(70 * scaleX, 10 * scaleY);
 	// коллизии
 	Collision home(0, 0, 192 * scaleX, 183 * scaleY);
 	Collision gym((512 - 32) * scaleX, 0, 32 * scaleX, 183 * scaleY);
@@ -193,6 +205,10 @@ void Engine::GamePlay()
 					HomePlay(window);
 					
 				}
+				if (near_door_gym.collision(person) && event.key.code == sf::Keyboard::E)
+				{
+					GymPlay(person, window);
+				}
 				break;
 				
 
@@ -242,6 +258,7 @@ void Engine::GamePlay()
 			person.set_position(position.x, 5);
 		}
 		text.setString("Money: " + std::to_string(person.get_money()));
+		day.setString("Day: " + std::to_string(person.get_day()));
 		// background 1
 		if (is_scene_1)
 		{
@@ -266,6 +283,7 @@ void Engine::GamePlay()
 			person.draw(window);
 			person.draw_interface(window, scaleX, scaleY);
 			window.draw(text);
+			window.draw(day);
 			window.display();
 		}
 		
@@ -286,6 +304,7 @@ void Engine::GamePlay()
 			person.draw(window);
 			person.draw_interface(window, scaleX, scaleY);
 			window.draw(text);
+			window.draw(day);
 			window.display();
 		}
 	}
@@ -321,6 +340,12 @@ void Engine::HomePlay(sf::RenderWindow& window)
 	text.setFillColor(sf::Color::White); // Цвет текста
 	text.setPosition(10 * scaleX, 10 * scaleY);
 
+	sf::Text day;
+	day.setFont(AssetManager::GetFont("font/mainmenu.otf")); // Устанавливаем шрифт
+	day.setCharacterSize(50); // Размер шрифта
+	day.setFillColor(sf::Color::White);
+	day.setPosition(70 * scaleX, 10 * scaleY);
+
 	person.set_position(32*scaleX, 223 *scaleY);
 	Collision wall(0, 0, 23 * scaleX, height);
 	Collision piano(41 * scaleX, 2, 96 * scaleX, 48 * scaleY);
@@ -334,7 +359,7 @@ void Engine::HomePlay(sf::RenderWindow& window)
 
 	Collision door(0, 240 * scaleY, 23 * scaleX, 22 * scaleY);
 	Collision near_door(23 * scaleX, 240 * scaleY, 29 * scaleX, 26 * scaleY);
-	sf::Vector2f position = person.get_position();;
+	sf::Vector2f position = person.get_position();
 
 	while (window.isOpen())
 	{
@@ -392,6 +417,29 @@ void Engine::HomePlay(sf::RenderWindow& window)
 					if (person.get_hunger())
 					{
 						FridgePlay(window);
+					}
+				}
+				if (near_bed.collision(person) && event.key.code == sf::Keyboard::E)
+				{
+					if (person.get_lvl_sleep())
+					{
+						sf::RectangleShape background2(sf::Vector2f(width, height));
+						background2.setTexture(&AssetManager::GetTexture("image/home_sleep.png"));
+						sf::Sound sleep;
+						sleep.setBuffer(AssetManager::GetSoundBuffer("sound/night.wav"));
+						sleep.play();
+						window.clear();
+						window.draw(background2);
+						window.display();
+						backgroundmusic.stop();
+						
+						sf::sleep(sf::seconds(person.get_lvl_sleep() / 10));
+						sleep.stop();
+						backgroundmusic.play();
+						
+						person.update_sleep(-101);
+						person.update_day();
+
 					}
 				}
 				
@@ -453,6 +501,7 @@ void Engine::HomePlay(sf::RenderWindow& window)
 		if (full_fridge.collision(person)) { full_fridge.change_color(sf::Color::Yellow); }
 		else { full_fridge.change_color(sf::Color(0, 0, 0, 0)); }
 		text.setString("Money: " + std::to_string(person.get_money()));
+		day.setString("Day: " + std::to_string(person.get_day()));
 
 		window.clear();
 		window.draw(background);
@@ -461,6 +510,7 @@ void Engine::HomePlay(sf::RenderWindow& window)
 		window.draw(bed.get_rect());
 		person.draw(window);
 		window.draw(text);
+		window.draw(day);
 		person.draw_interface(window, scaleX, scaleY);
 		window.display();
 	}
@@ -567,6 +617,7 @@ void Engine::FridgePlay(sf::RenderWindow& window)
 				{
 					person.update_hunger(-foods[heght][wedth].get_satiety());
 					person.update_money(foods[heght][wedth].get_coast());
+					
 					enter.play();
 					while (enter.getStatus() == sf::Sound::Playing) {
 						sf::sleep(sf::microseconds(100));

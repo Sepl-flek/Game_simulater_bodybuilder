@@ -24,9 +24,12 @@ public:
 	void update_hunger(int procant); // увеличить голод
 	void update_sleep(int procant); // увеличить желание спать
 	void update_money(int coast);
+	void update_day();
 	int get_hunger();
 	int get_money();
 	int get_lvl_sleep();
+	int get_day();
+	
 
 
 private:
@@ -35,7 +38,7 @@ private:
 	int lvl_sleep = 0; // 100 - max
 	int hunger = 0; // 100 - max
 	int day = 1;
-	std::string daystr = "1";
+	
 	
 	sf::Sprite meat;
 	sf::Sprite energy;

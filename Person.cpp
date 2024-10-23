@@ -150,12 +150,17 @@ void Person::update_sleep(int procant)
 	lvl_sleep += procant;
 	if (lvl_sleep > 100) lvl_sleep = 100;
 	if (lvl_sleep < 0) lvl_sleep = 0;
-	full_rect_lvl_sleep.setSize(sf::Vector2f(200 + lvl_sleep * 2, 50));
+	full_rect_lvl_sleep.setSize(sf::Vector2f(200 - lvl_sleep * 2, 50));
 }
 
 void Person::update_money(int coast)
 {
 	money -= coast;
+}
+
+void Person::update_day()
+{
+	day++;
 }
 
 int Person::get_hunger()
@@ -171,5 +176,10 @@ int Person::get_money()
 int Person::get_lvl_sleep()
 {
 	return lvl_sleep;
+}
+
+int Person::get_day()
+{
+	return day;
 }
 

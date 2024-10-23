@@ -7,6 +7,7 @@
 #include "Person.h"
 #include "Collision.h"
 #include "Food.h"
+#include "location.h"
 class Engine
 {
 	AssetManager manager; // менеджер ресурсов
@@ -42,7 +43,7 @@ class Engine
 	void update(sf::Time const & deltaTime);
 	void draw();
 
-
+	sf::Music backgroundmusic;
 	
 public:
 	Engine();
