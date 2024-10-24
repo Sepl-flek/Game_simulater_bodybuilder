@@ -7,6 +7,8 @@ void GymPlay(Person& person, sf::RenderWindow& window)
 	float height = sf::VideoMode::getDesktopMode().height;
 	float scaleY = height / 512;
 	float scaleX = width / 512;
+	person.set_position(5*scaleX,270*scaleY);
+
 
 	sf::RectangleShape background(sf::Vector2f(width, height));
 	background.setTexture(&AssetManager::GetTexture("image/black.png"));
@@ -36,8 +38,28 @@ void GymPlay(Person& person, sf::RenderWindow& window)
 	int traffic = 0;
 	sf::Vector2f moveRec;
 
+	Collision exit(0, 287 * scaleY, 35 * scaleX, 35 * scaleX);
+	Collision treadmills(260 * scaleX, 110 * scaleY, 180 * scaleX, 45 * scaleY);
+	Collision wall(0, 110 * scaleY, 512 * scaleX, 27 * scaleY);
+	Collision squat(440 * scaleX, 136 * scaleY, 70 * scaleX, 71 * scaleY);
+	Collision soda(480 * scaleX, 217 * scaleY, 24 * scaleX, 50 * scaleY);
+	Collision bench(365 * scaleX, 408 * scaleY, 111 * scaleX, 14 * scaleY);
+	Collision bench2(413 * scaleX, 356 * scaleY, 21 * scaleX, 47 * scaleY);
+	Collision wheel(265 * scaleX, 390 * scaleY, 70 * scaleX,  10 * scaleY);
+	Collision bars(30 * scaleX, 425 * scaleY, 82 * scaleX, 18 * scaleY);
+	Collision bars2(60 * scaleX, 390 * scaleY, 35 * scaleX, 30 * scaleY);
+
+	std::vector<Collision> collisions { wall,treadmills, squat,soda, bench, bench2, wheel,bars, bars2};
+
 	float time;
 	sf::Clock clock, clockAnimPlay;
+	sf::Music backgroundmusic;
+	backgroundmusic.openFromFile("sound/gymplay_back.wav");
+
+	backgroundmusic.setVolume(20);
+	backgroundmusic.setLoop(true);
+	backgroundmusic.play();
+
 	while (window.isOpen())
 	{
 		time = clock.getElapsedTime().asMicroseconds();
@@ -45,8 +67,19 @@ void GymPlay(Person& person, sf::RenderWindow& window)
 		clock.restart();
 		sf::Event event;
 
-		//if ( ) {// collsion
-		//	position = person.get_position();}
+		//collision
+		bool flag = true;
+		for (int i = 0; i < collisions.size(); ++i) {
+
+			if (collisions[i].collision(person))
+			{
+				flag = false;
+				break;
+			}
+		}
+		if(flag) {
+			position = person.get_position();}
+		//-----------------------------------------
 
 		while (window.pollEvent(event))
 		{
@@ -74,6 +107,19 @@ void GymPlay(Person& person, sf::RenderWindow& window)
 				if ((event.key.code == sf::Keyboard::D)) {
 					moveRec.x = parametr * time;
 					traffic = 1;
+				}
+				if( exit.collision(person) && event.key.code == sf::Keyboard::E)
+				{
+					background.setTexture(&AssetManager::GetTexture("image/black.png"));
+					window.clear();
+					window.draw(background);
+					window.display();
+					sf::sleep(sf::seconds(0.5));
+					background.setTexture(&AssetManager::GetTexture("image/background2.png"));
+					person.set_position(475 * scaleX, 145 * scaleY);
+					person.set_scale(2, 2);
+					backgroundmusic.stop();
+					return;
 				}
 				
 
@@ -120,27 +166,29 @@ void GymPlay(Person& person, sf::RenderWindow& window)
 		//	door.change_color(sf::Color(0, 0, 0, 0));
 		//}
 
+		
+		// коллизии 
+		if (!flag)
+		{
+			person.set_position(position.x, position.y);
+		}
 		person.move(moveRec, width, height);
-		//// коллизии 
-		//if ()
-		//{
-		//	person.set_position(position.x, position.y);
-		//}
-
 		//if (near_bed.collision(person)) { bed.change_color(sf::Color::Yellow); }
 		//else { bed.change_color(sf::Color(0, 0, 0, 0)); }
 
-		//if (full_fridge.collision(person)) { full_fridge.change_color(sf::Color::Yellow); }
-		//else { full_fridge.change_color(sf::Color(0, 0, 0, 0)); }
-		//text.setString("Money: " + std::to_string(person.get_money()));
-		//day.setString("Day: " + std::to_string(person.get_day()));
+		if (exit.collision(person)) { exit.change_color(sf::Color::Yellow); }
+		else { exit.change_color(sf::Color(0, 0, 0, 0)); }
 
 		text.setString("Money: " + std::to_string(person.get_money()));
 		day.setString("Day: " + std::to_string(person.get_day()));
 
+		text.setString("Money: " + std::to_string(person.get_money()));
+		day.setString("Day: " + std::to_string(person.get_day()));
+
+
 		window.clear();
 		window.draw(background);
-		
+		window.draw(exit.get_rect());
 		person.draw(window);
 		window.draw(text);
 		window.draw(day);

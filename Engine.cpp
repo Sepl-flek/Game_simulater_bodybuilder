@@ -207,7 +207,9 @@ void Engine::GamePlay()
 				}
 				if (near_door_gym.collision(person) && event.key.code == sf::Keyboard::E)
 				{
+					backgroundmusic.pause();
 					GymPlay(person, window);
+					backgroundmusic.play();
 				}
 				break;
 				
@@ -431,7 +433,7 @@ void Engine::HomePlay(sf::RenderWindow& window)
 						window.clear();
 						window.draw(background2);
 						window.display();
-						backgroundmusic.stop();
+						backgroundmusic.pause();
 						
 						sf::sleep(sf::seconds(person.get_lvl_sleep() / 10));
 						sleep.stop();
