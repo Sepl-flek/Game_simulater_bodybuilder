@@ -38,7 +38,9 @@ private:
 	int lvl_sleep = 0; // 100 - max
 	int hunger = 0; // 100 - max
 	int day = 1;
-	
+	float leg_power = 10;
+	float chest_power = 10;
+	float back_power = 10;
 	
 	sf::Sprite meat;
 	sf::Sprite energy;
