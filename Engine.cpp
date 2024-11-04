@@ -109,7 +109,7 @@ void Engine::GamePlay()
 	backgroundmusic.setLoop(true);
 	backgroundmusic.play();
 	
-	person.update_sleep(100);
+	
 	person.update_hunger(30);
 	
 	sf::RectangleShape background(sf::Vector2f(width, height));
@@ -200,17 +200,22 @@ void Engine::GamePlay()
 					moveRec.x = parametr * time;
 					traffic = 1;
 				}
-				if (door_home.collision(person) && event.key.code == sf::Keyboard::E)
+				if (is_scene_1 && door_home.collision(person) && event.key.code == sf::Keyboard::E)
 				{
 					HomePlay(window);
 					
 				}
-				if (near_door_gym.collision(person) && event.key.code == sf::Keyboard::E)
+				if ( is_scene_1 && near_door_gym.collision(person) && event.key.code == sf::Keyboard::E)
 				{
 					backgroundmusic.pause();
 					GymPlay(person, window);
 					backgroundmusic.play();
 				}
+				if(is_scene_1 && near_door_work.collision(person) && event.key.code == sf::Keyboard::E)
+				{
+					workPlay(person, window);
+				}
+
 				break;
 				
 
