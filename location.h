@@ -6,6 +6,7 @@
 #include "time.h"
 #include <math.h>
 #include <sstream> 
+#include "Workgame.h"
 
 
 void GymPlay(Person& person, sf::RenderWindow& window);

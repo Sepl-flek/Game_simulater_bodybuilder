@@ -1,63 +1,64 @@
 #include "Meteor.h"
 
-Meteor::Meteor()            
+Meteor::Meteor()
 {
-	TextureObject.loadFromFile("Image/asteroid.png");
-	SpaceObject.setTexture(TextureObject);
-	SpaceObject.setTextureRect(IntRect(262, 325, 55, 50));
+	texture_object.loadFromFile("pictures/asteroid.png");
+	space_object.setTexture(texture_object);
+	space_object.setTextureRect(sf::IntRect(262, 325, 55, 50));
+
 	restart();
 }
 
-Meteor::~Meteor()           
+Meteor::~Meteor()
 {
-
-}
-
-void Meteor::restart()  
-{
-	newborn = true;
-	float s = static_cast<float>(rand() % 20 + 10);     
-	float x = static_cast<float>(rand() % 1280 + 1280); 
-	float y = static_cast<float>(rand() % 540 + 130);   
-	SpaceObject.setPosition(Vector2f(x, y));
-	SpaceObject.setScale(s / 20, s / 20);
-	ix = rand() % 4;                                     
-	iy = rand() % 5;                                     
-	st = rand() % 2;	                                 
-
-	PosBonus = SpaceObject.getPosition();
-}
-
-const FloatRect Meteor::getMeteorBounds()
-{
-	return SpaceObject.getGlobalBounds();
 }
 
 void Meteor::move(float& time)
 {
-	newborn = false;
-	SpaceObject.move(static_cast<float>(-0.5 * time), 0);
-	PosBonus = SpaceObject.getPosition();
-	if (SpaceObject.getPosition().x < -60) restart();
+	space_object.move(static_cast<float>(-0.5 * time), 0);
+	if (space_object.getPosition().x < -60) {
+		restart();
+	}
 }
 
-void Meteor::draw(RenderWindow& window)
+void Meteor::draw(sf::RenderWindow& window)
 {
-	window.draw(SpaceObject);
+	window.draw(space_object);
 }
 
 void Meteor::animation()
 {
 	if (st > 0) {
-		SpaceObject.setTextureRect(IntRect(xsp[ix], ysp[iy], 50, 45));
+		space_object.setTextureRect(sf::IntRect(xsp[ix], ysp[iy], 50, 45));
 		ix += st;
-		if (ix > 4) { ix = 0; iy++; if (iy > 5) iy = 0; }
+		ix = ix % 5;
+		iy += 1;
+		iy %= 6;
 	}
 }
 
-bool Meteor::Collision(FloatRect object)
+bool Meteor::collision(sf::FloatRect object)
 {
-	if (SpaceObject.getGlobalBounds().intersects(object)) return true;
 
-	return false;
+	return space_object.getGlobalBounds().intersects(object);
+}
+
+void Meteor::restart()
+{
+	float scale = static_cast<float>((rand() % 13 + 5) / 10);
+	float x = static_cast<float>(rand() % 1280 + 1280);
+	float y = static_cast<float>(rand() % 540 + 130);
+
+	space_object.setPosition(sf::Vector2f(x, y));
+
+	space_object.setScale(scale, scale);
+
+	ix = rand() % 4;
+	iy = rand() % 5;
+	st = rand() % 2;
+}
+
+sf::FloatRect Meteor::get_meteor_bounds()
+{
+	return space_object.getGlobalBounds();
 }

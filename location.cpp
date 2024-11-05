@@ -567,6 +567,9 @@ void workPlay(Person& person, sf::RenderWindow& window)
 	Collision computer11(188 * scaleX, 443 * scaleY, 96 * scaleX, 8 * scaleY);
 	Collision computer12(338 * scaleX, 443 * scaleY, 96 * scaleX, 8 * scaleY);
 
+	Collision near_my_computer(338 * scaleX, 154 * scaleY, 97 * scaleX, 51 * scaleY);
+
+
 	std::vector<Collision> collisions{computer1,computer2,computer3,computer4,computer5,computer6,computer7,computer8,computer9
 		,computer10,computer11,computer12 };
 
@@ -637,6 +640,10 @@ void workPlay(Person& person, sf::RenderWindow& window)
 
 					return;
 				}
+				if (near_my_computer.collision(person) && event.key.code == sf::Keyboard::E)
+				{
+					workgame(window);
+				}
 				break;
 
 			case sf::Event::KeyReleased: //кнопка отпущена 
@@ -680,6 +687,9 @@ void workPlay(Person& person, sf::RenderWindow& window)
 		if (exit.collision(person)) { exit.change_color(sf::Color::Yellow); }
 		else { exit.change_color(sf::Color(0, 0, 0, 0)); }
 
+		if (near_my_computer.collision(person)) { near_my_computer.change_color(sf::Color::Yellow); }
+		else { near_my_computer.change_color(sf::Color(0, 0, 0, 0)); }
+
 		text.setString("Money: " + std::to_string(person.get_money()));
 		day.setString("Day: " + std::to_string(person.get_day()));
 
@@ -690,6 +700,7 @@ void workPlay(Person& person, sf::RenderWindow& window)
 		window.clear();
 		window.draw(background);
 		window.draw(exit.get_rect());
+		window.draw(near_my_computer.get_rect());
 		person.draw(window);
 		window.draw(text);
 		window.draw(day);
