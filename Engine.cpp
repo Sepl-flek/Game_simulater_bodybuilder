@@ -213,7 +213,9 @@ void Engine::GamePlay()
 				}
 				if(is_scene_1 && near_door_work.collision(person) && event.key.code == sf::Keyboard::E)
 				{
+					backgroundmusic.pause();
 					workPlay(person, window);
+					backgroundmusic.play();
 				}
 
 				break;
@@ -527,12 +529,12 @@ void Engine::FridgePlay(sf::RenderWindow& window)
 {
 	float scaleX = width / 512;
 	float scaleY = height / 512;
-	Food burger(84, 128, sf::Vector2f(102 * scaleX,132 * scaleY), "image/foods.png", 20, scaleY,scaleY,30);
-	Food chiken(200, 125, sf::Vector2f(216 * scaleX,133 * scaleY), "image/foods.png", 20, scaleY, scaleY,25);
-	Food chees(310, 126, sf::Vector2f(347 * scaleX,132 * scaleY), "image/foods.png", 20, scaleY, scaleY,15);
-	Food fish(84, 230, sf::Vector2f(102 * scaleX,262 * scaleY), "image/foods.png", 20, scaleY, scaleY,13);
-	Food ogrizok(197, 231, sf::Vector2f(216 * scaleX,262 * scaleY), "image/foods.png", 20, scaleY, scaleY,7);
-	Food wine(312, 230, sf::Vector2f(347* scaleX,262*scaleY), "image/foods.png", 20, scaleY, scaleY,1);
+	Food burger(84, 128, sf::Vector2f(102 * scaleX,132 * scaleY), "image/foods.png", 200, scaleY,scaleY,30);
+	Food chiken(200, 125, sf::Vector2f(216 * scaleX,133 * scaleY), "image/foods.png", 150, scaleY, scaleY,25);
+	Food chees(310, 126, sf::Vector2f(347 * scaleX,132 * scaleY), "image/foods.png", 130, scaleY, scaleY,15);
+	Food fish(84, 230, sf::Vector2f(102 * scaleX,262 * scaleY), "image/foods.png", 125, scaleY, scaleY,13);
+	Food ogrizok(197, 231, sf::Vector2f(216 * scaleX,262 * scaleY), "image/foods.png", 200, scaleY, scaleY,7);
+	Food wine(312, 230, sf::Vector2f(347* scaleX,262*scaleY), "image/foods.png", 200, scaleY, scaleY,1);
 	std::vector<std::vector<Food>> foods = { {burger,chiken,chees},{fish,ogrizok,wine} };
 	int h = foods.size(),w = foods[0].size();
 	sf::RectangleShape background(sf::Vector2f(width, height));

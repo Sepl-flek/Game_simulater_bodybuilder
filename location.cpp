@@ -152,6 +152,16 @@ void GymPlay(Person& person, sf::RenderWindow& window)
 						backgroundmusic.play();
 					}
 				}
+				if (near_bench.collision(person) && event.key.code == sf::Keyboard::E)
+				{
+					if (person.get_lvl_sleep() < 100 && person.get_hunger() < 100)
+					{
+						backgroundmusic.pause();
+						benchPlay(person, window);
+
+						backgroundmusic.play();
+					}
+				}
 				
 
 				break;
@@ -516,6 +526,13 @@ void TrainingSquad(Person& person, sf::RenderWindow& window)
 
 void workPlay(Person& person, sf::RenderWindow& window)
 {
+	sf::Music backgroundmusic;
+	backgroundmusic.openFromFile("sound/listopadom.wav");
+
+	backgroundmusic.setVolume(20);
+	backgroundmusic.setLoop(true);
+	backgroundmusic.play();
+
 	float width = sf::VideoMode::getDesktopMode().width;
 	float height = sf::VideoMode::getDesktopMode().height;
 	float scaleY = height / 512;
@@ -576,7 +593,7 @@ void workPlay(Person& person, sf::RenderWindow& window)
 
 	float time;
 	sf::Clock clock, clockAnimPlay;
-	sf::Music backgroundmusic;
+	
 
 	while (window.isOpen())
 	{
@@ -642,7 +659,9 @@ void workPlay(Person& person, sf::RenderWindow& window)
 				}
 				if (near_my_computer.collision(person) && event.key.code == sf::Keyboard::E)
 				{
-					workgame(window);
+					backgroundmusic.pause();
+					workgame(window,person);
+					backgroundmusic.play();
 				}
 				break;
 
@@ -708,5 +727,204 @@ void workPlay(Person& person, sf::RenderWindow& window)
 		window.display();
 	}
 
+
+}
+
+void benchPlay(Person& person, sf::RenderWindow& window)
+{
+	srand(time(NULL));
+	float width = sf::VideoMode::getDesktopMode().width;
+	float height = sf::VideoMode::getDesktopMode().height;
+	float scaleY = height / 512;
+	float scaleX = width / 512;
+
+
+	sf::RectangleShape background(sf::Vector2f(width, height));
+	background.setTexture(&AssetManager::GetTexture("image/black.png"));
+	window.clear();
+	window.draw(background);
+	window.display();
+	sf::sleep(sf::seconds(0.5));
+	background.setTexture(&AssetManager::GetTexture("image/bench1.png"));
+	sf::RectangleShape background2(sf::Vector2f(width, height));
+	background2.setTexture(&AssetManager::GetTexture("image/bench2.png"));
+
+
+	sf::Music backgroundmusic;
+
+	if (!backgroundmusic.openFromFile("sound/funk1.wav")) {
+
+		return;
+	}
+
+	backgroundmusic.setVolume(20);
+	backgroundmusic.setLoop(true);
+	backgroundmusic.play();
+
+
+
+	
+
+	
+	sf::Clock clock;
+	bool isActive = false, isPlaying = false, isGameOver = false, showPrompt = false;
+	int attemptCount = 0;
+	sf::Time delayTime = sf::seconds(1.f);
+	sf::Time endDelay = sf::seconds(2.f);
+	float sliderSpeed = 200.f;
+	float scaleWidth = 500.f;
+	float initialGreenZoneWidth = 100.f;
+	float minGreenZoneWidth = 20.f;
+	float greenZoneWidth = initialGreenZoneWidth;
+	bool direction = true;
+
+	// Настройка шкалы, зеленой зоны и ползунка
+	sf::RectangleShape scale(sf::Vector2f(scaleWidth, 20.f));
+	scale.setFillColor(sf::Color::Red);
+	scale.setPosition(150.f, 300.f);
+
+	sf::RectangleShape greenZone(sf::Vector2f(greenZoneWidth, 20.f));
+	greenZone.setFillColor(sf::Color::Green);
+	float greenZonePosition = 150.f + rand() % (int)(scaleWidth - greenZoneWidth);
+	greenZone.setPosition(greenZonePosition, 300.f);
+
+	sf::RectangleShape slider(sf::Vector2f(10.f, 20.f));
+	slider.setFillColor(sf::Color::Yellow);
+	float sliderPos = 150.f;
+
+	// Настройка текста
+	sf::Font font;
+	font.loadFromFile("font/mainmenu.otf"); // Убедитесь, что шрифт есть в папке
+	sf::Text messageText(L"Нажмите E, чтобы начать", font, 24);
+	messageText.setPosition(200.f, 100.f);
+	sf::Text promptText(L"Нажмите E, чтобы продолжить, или ENTER, чтобы закончить", font, 24);
+	promptText.setPosition(150.f, 100.f);
+	sf::Text resultText("", font, 24);
+	resultText.setPosition(200.f, 100.f);
+
+	while (window.isOpen()) {
+		sf::Event event;
+		while (window.pollEvent(event)) {
+			if (event.type == sf::Event::Closed)
+				window.close();
+
+			if (event.type == sf::Event::KeyPressed) {
+				if (event.key.code == sf::Keyboard::E && !isActive && !isPlaying && !isGameOver) {
+					if (showPrompt) {
+						// Игрок выбрал продолжить игру после успешного попадания
+						showPrompt = false;
+						isActive = true;
+						clock.restart();
+						messageText.setString("");
+					}
+					else if (!isPlaying) {
+						// Начало новой попытки
+						isActive = true;
+						clock.restart();
+						messageText.setString("");
+					}
+				}
+
+				if (event.key.code == sf::Keyboard::Enter && showPrompt) {
+					// Игрок выбрал завершить игру после успешного попадания
+					isGameOver = true;
+					resultText.setString("You made " + std::to_string(attemptCount) + " reapets");
+					clock.restart();
+				}
+			}
+
+			// Проверка нажатия левой кнопки мыши в игровом процессе
+			if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left && isPlaying) {
+				if (sliderPos >= greenZonePosition && sliderPos <= greenZonePosition + greenZoneWidth) {
+					// Игрок попал в зеленую зону, увеличиваем счетчик попыток
+					attemptCount++;
+
+					// Уменьшаем ширину зеленой зоны, но не меньше минимальной ширины
+					greenZoneWidth = std::max(greenZoneWidth * 0.9f, minGreenZoneWidth);
+					greenZone.setSize(sf::Vector2f(greenZoneWidth, 20.f));
+
+					// Переход в режим приглашения продолжить или закончить
+					isPlaying = false;
+					showPrompt = true;
+				}
+				else {
+					// Промах - проигрыш
+					person.update_hunger((3 * attemptCount + rand() % 40));
+					person.update_sleep(30);
+					isGameOver = true;
+					resultText.setString("You made " + std::to_string(attemptCount) + " reapets");
+					window.clear();
+					window.draw(background);
+					window.draw(resultText);
+					window.display();
+					sf::sleep(sf::seconds(2));
+					return;
+					clock.restart();
+				}
+			}
+		}
+
+		// Проверка задержки перед началом игры
+		if (isActive && clock.getElapsedTime() >= delayTime) {
+			isPlaying = true;
+			isActive = false;
+			greenZonePosition = 150.f + rand() % (int)(scaleWidth - greenZoneWidth);
+			greenZone.setPosition(greenZonePosition, 300.f);
+			clock.restart();
+		}
+
+		// Игровой процесс
+		if (isPlaying) {
+			sf::Time elapsed = clock.getElapsedTime();
+			if (elapsed.asSeconds() > 5) {
+				// Время вышло - проигрыш
+				isGameOver = true;
+				resultText.setString("You made " + std::to_string(attemptCount) + " reapets");
+				clock.restart();
+			}
+
+			// Движение ползунка
+			if (direction)
+				sliderPos += sliderSpeed * elapsed.asSeconds();
+			else
+				sliderPos -= sliderSpeed * elapsed.asSeconds();
+
+			if (sliderPos <= 150.f || sliderPos >= 650.f)
+				direction = !direction;
+
+			slider.setPosition(sliderPos, 300.f);
+			clock.restart();
+		}
+
+		// Завершение игры
+		if (isGameOver && clock.getElapsedTime() >= endDelay) {
+			person.update_sleep(25);
+			person.update_hunger((2 * attemptCount + rand() % 20));
+			return;
+		}
+
+		// Рендеринг элементов
+		window.clear();
+		if (isGameOver) {
+			window.draw(background);
+			window.draw(resultText);
+		}
+		else if (showPrompt) {
+			window.draw(background);
+			window.draw(promptText);
+
+		}
+		else {
+			window.draw(background);
+			window.draw(messageText);
+			if (isPlaying || isActive) {
+				window.draw(background2);
+				window.draw(scale);
+				window.draw(greenZone);
+				window.draw(slider);
+			}
+		}
+		window.display();
+	}
 
 }

@@ -11,14 +11,26 @@ public:
 	void draw(sf::RenderWindow& window); // ��������� �������
 	void animation(); // �������� �������
 	bool collision(sf::FloatRect object); // ������������ �������
-	void restart(); // ��������� ����� ���������
+	virtual void restart(); // ��������� ����� ���������
 	sf::FloatRect get_meteor_bounds(); // ��������� ���������� ���������
+	sf::Vector2f getPosBonus()
+	{
+		return PosBonus;
+	}
+	bool new_born;
 
-private:
+protected:
 	sf::Sprite space_object;  //������ ��������
 	sf::Texture texture_object; // �������� ��������
+	sf::Vector2f PosBonus;
+	int width = sf::VideoMode::getDesktopMode().width;
+	int height = sf::VideoMode::getDesktopMode().height;
 
+private:
+	
 
+	int max_x;
+	int  max_y;
 	int xsp[5]{ 3,73,135,198,262 };       // ���������� �������� �� x
 	int ysp[6]{ 3,68,132,200,265,325 };   // ���������� �������� �� y
 

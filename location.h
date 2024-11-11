@@ -14,3 +14,4 @@ void TrainigWheel(Person& person, sf::RenderWindow& window);
 bool isPointClicked(sf::Vector2i mousePos, sf::CircleShape& dot);
 void TrainingSquad(Person& person, sf::RenderWindow& window);
 void workPlay(Person& person, sf::RenderWindow& window);
+void benchPlay(Person& person, sf::RenderWindow& window);
