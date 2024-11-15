@@ -64,6 +64,11 @@ void Person::set_scale(float x, float y)
 	person.setScale(x, y);
 }
 
+void Person::set_day(int _day)
+{
+	day = _day;
+}
+
 void Person::draw(sf::RenderWindow& window)
 {
 	window.draw(person);

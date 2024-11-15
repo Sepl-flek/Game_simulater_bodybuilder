@@ -66,7 +66,9 @@ void Engine::GameMenu()
                     {
                     case 0:  window.close(); return; break;
               
-					case 1: exit(0); break;
+					case 1: 
+						LoadGame(window);
+						break;
 
 					case 2: exit(0); break;
                     default:break;
@@ -667,6 +669,8 @@ void Engine::draw()
 	
 }
 
+
+
 Engine::Engine()
 {
 	
@@ -691,3 +695,126 @@ void Engine::run()
 		draw();
 	}*/
 }
+
+
+void Engine::save_game(std::string& filepath, Person& person)
+{
+	std::ofstream outFile(filepath);
+	if (outFile.is_open()) {
+		outFile << "Day: " << person.get_day() << "\n";
+		outFile << "Money: " << person.get_money() << "\n";
+		outFile << "LevelSleep: " << person.get_lvl_sleep() << "\n";
+		outFile << "LevelHunger: " << person.get_hunger() << "\n";
+		
+		outFile.close();
+		
+	}
+	else {
+		std::cerr << "Error: Unable to save game data to " << filepath << "\n";
+	}
+}
+
+bool Engine::loadGameData(const std::string& filename, Person& person)
+{
+	std::ifstream inFile(filename);
+	if (inFile.is_open()) {
+		std::string line;
+		int day = 1, money = 100, lvl_sleep = 0,lvl_hunger = 0;
+
+		while (std::getline(inFile, line)) {
+			std::istringstream iss(line);
+			std::string key;
+			if (line.find("Day:") != std::string::npos) {
+				iss >> key >> day;  
+			}
+			else if (line.find("Money:") != std::string::npos) {
+				iss >> key >> money;  
+			}
+			if (line.find("LevelSleep:") != std::string::npos) {
+				iss >> key >> lvl_sleep;  
+			}
+			else if (line.find("LevelHunger:") != std::string::npos) {
+				iss >> key >> lvl_hunger;  
+			}
+		}
+		inFile.close();
+		person.update_money(-money+1000);
+		person.update_hunger(-lvl_hunger + 100);
+		person.update_sleep(-lvl_sleep + 100);
+		person.set_day(day);
+		return true;
+	}
+	else {
+		std::cerr << "Error: Unable to load game data from " << filename << "\n";
+		return false;
+	}
+}
+
+void Engine::LoadGame(sf::RenderWindow& window)
+{
+	float scaleX, scaleY;
+	scaleX = width / 900;
+	scaleY = height / 675;
+	sf::RectangleShape background(sf::Vector2f(width,height));
+	background.setTexture(&AssetManager::GetTexture("image/menu.jpg"));
+
+	std::string folderPath = "D:/Visual-studio/projects/Game_body/saved_games";
+	std::vector<std::string> files = getFilesInDirectory(folderPath);
+	
+	std::vector<sf::Text> filestexts;
+	
+	
+
+	for (size_t i = 0; i < files.size(); ++i) {
+		sf::Text text;
+		text.setFont(AssetManager::GetFont("font/mainmenu.otf"));
+		text.setCharacterSize(50);
+		text.setString(files[i]);
+		
+		text.setFillColor(sf::Color::Red);
+		text.setPosition(405 * scaleX, (125.f + i * 40.f) * scaleY);  // Располагаем текст строками
+		filestexts.push_back(text);
+	}
+	
+
+	while (window.isOpen())
+	{
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			switch (event.type)
+			{
+			case sf::Event::KeyReleased:
+				if (event.key.code == sf::Keyboard::Escape)
+				{
+					return;
+				}
+			}
+		}
+
+		window.clear();
+		window.draw(background);
+		for (const auto& text : filestexts) {
+			window.draw(text);
+		}
+
+		window.display();
+	}
+}
+
+std::vector<std::string> Engine::getFilesInDirectory(const std::string& directoryPath)
+{
+	std::vector<std::string> fileNames;
+	try {
+		for (const auto& entry : fs::directory_iterator(directoryPath)) {
+			if (entry.is_regular_file()) {  // Проверяем, является ли объект файлом
+				fileNames.push_back(entry.path().filename().string());
+			}
+		}
+	}
+	catch (const std::exception& e) {
+		std::cerr << "Error reading directory: " << e.what() << "\n";
+	}
+	return fileNames;
+}
+

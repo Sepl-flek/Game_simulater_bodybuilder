@@ -8,6 +8,11 @@
 #include "Collision.h"
 #include "Food.h"
 #include "location.h"
+#include <fstream>
+#include <iostream>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 class Engine
 {
 	AssetManager manager; // менеджер ресурсов
@@ -44,6 +49,12 @@ class Engine
 	void draw();
 
 	sf::Music backgroundmusic;
+	
+	void save_game(std::string& filepath,Person& person);
+	bool loadGameData(const std::string& filename,Person& person);
+
+	void LoadGame(sf::RenderWindow& window);
+	std::vector<std::string> getFilesInDirectory(const std::string& directoryPath);
 	
 public:
 	Engine();

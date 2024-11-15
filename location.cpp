@@ -795,12 +795,12 @@ void benchPlay(Person& person, sf::RenderWindow& window)
 	// Настройка текста
 	sf::Font font;
 	font.loadFromFile("font/mainmenu.otf"); // Убедитесь, что шрифт есть в папке
-	sf::Text messageText(L"Нажмите E, чтобы начать", font, 24);
-	messageText.setPosition(200.f, 100.f);
-	sf::Text promptText(L"Нажмите E, чтобы продолжить, или ENTER, чтобы закончить", font, 24);
+	sf::Text messageText(L"Нажмите E, чтобы начать", font, 50);
+	messageText.setPosition(300.f, 100.f);
+	sf::Text promptText(L"Нажмите E, чтобы продолжить, или ENTER, чтобы закончить", font, 50);
 	promptText.setPosition(150.f, 100.f);
-	sf::Text resultText("", font, 24);
-	resultText.setPosition(200.f, 100.f);
+	sf::Text resultText("", font, 50);
+	resultText.setPosition(300.f, 100.f);
 
 	while (window.isOpen()) {
 		sf::Event event;

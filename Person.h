@@ -15,6 +15,7 @@ public:
 	void move(sf::Vector2f move_rec,float wedth,float height);
 	void set_position(float x, float y);
 	void set_scale(float x, float y);
+	void set_day(int _day);
 	void draw(sf::RenderWindow& window); 
 	void draw_interface(sf::RenderWindow& window,float scaleX,float scaleY);
 	void animation(int trafic);
@@ -29,6 +30,7 @@ public:
 	int get_money();
 	int get_lvl_sleep();
 	int get_day();
+
 	
 
 
