@@ -94,7 +94,7 @@ void GymPlay(Person& person, sf::RenderWindow& window)
 		while (window.pollEvent(event))
 		{
 
-			if (event.key.code == sf::Keyboard::Escape) { window.close(); }
+			
 
 
 			switch (event.type)
@@ -620,7 +620,7 @@ void workPlay(Person& person, sf::RenderWindow& window)
 		while (window.pollEvent(event))
 		{
 
-			if (event.key.code == sf::Keyboard::Escape) { window.close(); }
+			
 
 
 			switch (event.type)

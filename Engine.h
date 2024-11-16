@@ -11,12 +11,14 @@
 #include <fstream>
 #include <iostream>
 #include <filesystem>
+#include "load.h"
 
 namespace fs = std::filesystem;
 class Engine
 {
 	AssetManager manager; // менеджер ресурсов
-	
+	std::string filename = "D:/Visual-studio/projects/Game_body/saved_games";
+
 	Person person = Person(1);
 	
 	// возможные доработки ращрешения
@@ -29,7 +31,7 @@ class Engine
 	sf::Vector2f(sf::VideoMode::getDesktopMode().width, sf::VideoMode::getDesktopMode().height));
 	float width = sf::VideoMode::getDesktopMode().width;
 	float height = sf::VideoMode::getDesktopMode().height;
-
+	
 	//Текст для главного Экрана
 	sf::Text text;
 	
@@ -50,11 +52,10 @@ class Engine
 
 	sf::Music backgroundmusic;
 	
-	void save_game(std::string& filepath,Person& person);
-	bool loadGameData(const std::string& filename,Person& person);
+	
 
-	void LoadGame(sf::RenderWindow& window);
-	std::vector<std::string> getFilesInDirectory(const std::string& directoryPath);
+	void LoadGame(sf::RenderWindow& window, Person& person);
+	
 	
 public:
 	Engine();

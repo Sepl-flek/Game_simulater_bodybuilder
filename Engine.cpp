@@ -62,12 +62,27 @@ void Engine::GameMenu()
 					while (enter.getStatus() == sf::Sound::Playing) {
 						sf::sleep(sf::microseconds(100));
 					}
+					std::vector<std::string> files = getFilesInDirectory(filename);
+					int the_biggest = 0;
                     switch (mymenu.getSelectedMenuNumber())
                     {
-                    case 0:  window.close(); return; break;
+						
+                    case 0:
+						
+						for (int i = 0; i < files.size(); ++i)
+						{
+							std::string nums = files[i].substr(4);
+							int num = std::stoi(nums);
+							if (num > the_biggest)
+							{
+								the_biggest = num;
+							}
+						}
+						filename = filename + "/" + "Game" + std::to_string(the_biggest + 1);
+						window.close(); return; break;
               
 					case 1: 
-						LoadGame(window);
+						LoadGame(window,person);
 						break;
 
 					case 2: exit(0); break;
@@ -112,7 +127,7 @@ void Engine::GamePlay()
 	backgroundmusic.play();
 	
 	
-	person.update_hunger(30);
+
 	
 	sf::RectangleShape background(sf::Vector2f(width, height));
 	background.setTexture(&AssetManager::GetTexture("image/background2.png"));
@@ -178,7 +193,11 @@ void Engine::GamePlay()
 		while (window.pollEvent(event))
 		{
 
-			if (event.key.code == sf::Keyboard::Escape) { window.close(); }
+			if (event.key.code == sf::Keyboard::Escape) 
+			{ 
+				save_game(filename, person);
+				window.close(); 
+			}
 			
 
 			switch (event.type)
@@ -386,7 +405,7 @@ void Engine::HomePlay(sf::RenderWindow& window)
 		while (window.pollEvent(event))
 		{
 
-			if (event.key.code == sf::Keyboard::Escape) { window.close(); }
+			
 
 
 			switch (event.type)
@@ -697,67 +716,20 @@ void Engine::run()
 }
 
 
-void Engine::save_game(std::string& filepath, Person& person)
-{
-	std::ofstream outFile(filepath);
-	if (outFile.is_open()) {
-		outFile << "Day: " << person.get_day() << "\n";
-		outFile << "Money: " << person.get_money() << "\n";
-		outFile << "LevelSleep: " << person.get_lvl_sleep() << "\n";
-		outFile << "LevelHunger: " << person.get_hunger() << "\n";
-		
-		outFile.close();
-		
-	}
-	else {
-		std::cerr << "Error: Unable to save game data to " << filepath << "\n";
-	}
-}
 
-bool Engine::loadGameData(const std::string& filename, Person& person)
-{
-	std::ifstream inFile(filename);
-	if (inFile.is_open()) {
-		std::string line;
-		int day = 1, money = 100, lvl_sleep = 0,lvl_hunger = 0;
 
-		while (std::getline(inFile, line)) {
-			std::istringstream iss(line);
-			std::string key;
-			if (line.find("Day:") != std::string::npos) {
-				iss >> key >> day;  
-			}
-			else if (line.find("Money:") != std::string::npos) {
-				iss >> key >> money;  
-			}
-			if (line.find("LevelSleep:") != std::string::npos) {
-				iss >> key >> lvl_sleep;  
-			}
-			else if (line.find("LevelHunger:") != std::string::npos) {
-				iss >> key >> lvl_hunger;  
-			}
-		}
-		inFile.close();
-		person.update_money(-money+1000);
-		person.update_hunger(-lvl_hunger + 100);
-		person.update_sleep(-lvl_sleep + 100);
-		person.set_day(day);
-		return true;
-	}
-	else {
-		std::cerr << "Error: Unable to load game data from " << filename << "\n";
-		return false;
-	}
-}
 
-void Engine::LoadGame(sf::RenderWindow& window)
+void Engine::LoadGame(sf::RenderWindow& window,Person& person)
 {
 	float scaleX, scaleY;
 	scaleX = width / 900;
 	scaleY = height / 675;
 	sf::RectangleShape background(sf::Vector2f(width,height));
 	background.setTexture(&AssetManager::GetTexture("image/menu.jpg"));
-
+	sf::Sound sound_next;
+	sound_next.setBuffer(AssetManager::GetSoundBuffer("sound/audiomenu2.wav"));
+	sf::Sound enter;
+	enter.setBuffer(AssetManager::GetSoundBuffer("sound/audiomenu5.wav"));
 	std::string folderPath = "D:/Visual-studio/projects/Game_body/saved_games";
 	std::vector<std::string> files = getFilesInDirectory(folderPath);
 	
@@ -775,6 +747,8 @@ void Engine::LoadGame(sf::RenderWindow& window)
 		text.setPosition(405 * scaleX, (125.f + i * 40.f) * scaleY);  // Располагаем текст строками
 		filestexts.push_back(text);
 	}
+	int count_files = files.size();
+	int selected = 0;
 	
 
 	while (window.isOpen())
@@ -789,6 +763,56 @@ void Engine::LoadGame(sf::RenderWindow& window)
 				{
 					return;
 				}
+				if (event.key.code == sf::Keyboard::Up)
+				{
+					sound_next.play();
+					selected--;
+
+					if (selected >= 0) {
+						filestexts[selected].setFillColor(sf::Color::Yellow);
+						filestexts[selected + 1].setFillColor(sf::Color::Red);
+					}
+					else
+					{
+						filestexts[0].setFillColor(sf::Color::Red);
+						selected = count_files - 1;
+						filestexts[selected].setFillColor(sf::Color::Yellow);
+					}
+					break;
+				}
+				if (event.key.code == sf::Keyboard::Down)
+				{
+					sound_next.play();
+					selected++;
+
+					if (selected < count_files) {
+						filestexts[selected - 1].setFillColor(sf::Color::Red);
+						filestexts[selected].setFillColor(sf::Color::Yellow);
+					}
+					else
+					{
+						filestexts[count_files - 1].setFillColor(sf::Color::Red);
+						selected = 0;
+						filestexts[selected].setFillColor(sf::Color::Yellow);
+					}
+					break;
+				}
+				if (event.key.code == sf::Keyboard::Return)
+				{
+					enter.play();
+					while (enter.getStatus() == sf::Sound::Playing) {
+						sf::sleep(sf::microseconds(100));
+					}
+					bool is_load = loadGameData(folderPath + "/" + files[selected], person);
+					filename = filename + "/" + files[selected];
+					if (is_load) {
+						window.close(); return; break;
+					}
+					
+
+				}
+
+			default:break;
 			}
 		}
 
@@ -802,19 +826,4 @@ void Engine::LoadGame(sf::RenderWindow& window)
 	}
 }
 
-std::vector<std::string> Engine::getFilesInDirectory(const std::string& directoryPath)
-{
-	std::vector<std::string> fileNames;
-	try {
-		for (const auto& entry : fs::directory_iterator(directoryPath)) {
-			if (entry.is_regular_file()) {  // Проверяем, является ли объект файлом
-				fileNames.push_back(entry.path().filename().string());
-			}
-		}
-	}
-	catch (const std::exception& e) {
-		std::cerr << "Error reading directory: " << e.what() << "\n";
-	}
-	return fileNames;
-}
 
