@@ -157,6 +157,7 @@ void Engine::GamePlay()
 	Collision near_door_work(475 * scaleX, 32 * scaleY, 15 * scaleX, 27 * scaleY);
 	
 	//векторы колизий дверей
+	Collision door_olimpia(240 * scaleX, 159 * scaleY, 40 * scaleX, 32 * scaleY);
 	std::vector<Collision> collisions{ door_home,door_gym,door_work };
 	std::vector<Collision> near_collisions{ door_home,near_door_gym,near_door_work };
 
@@ -164,7 +165,7 @@ void Engine::GamePlay()
 	sf::Vector2f position = person.get_position();
 	float time;
 	sf::Clock clock, clockAnimPlay;
-	const float parametr = 2;
+	const float parametr = 1;
 	int traffic = 0; // вид анимации
 	sf::Vector2f moveRec;// запись о том где у нас сейчас персонаж
 
@@ -236,6 +237,13 @@ void Engine::GamePlay()
 				{
 					backgroundmusic.pause();
 					workPlay(person, window);
+					backgroundmusic.play();
+				}
+				if (!is_scene_1 && door_olimpia.collision(person) && event.key.code == sf::Keyboard::E && person.get_day() % 7 == 0)
+				{
+					backgroundmusic.pause();
+					if(person.get_lvl_sleep() < 50)
+					OlimpiaPlay(person, window);
 					backgroundmusic.play();
 				}
 
@@ -325,12 +333,21 @@ void Engine::GamePlay()
 			{ 
 				person.set_position(position.x, position.y); 
 			}
+			if (door_olimpia.collision(person))
+			{
+				door_olimpia.change_color(sf::Color::Yellow);
+			}
+			else
+			{
+				door_olimpia.change_color(sf::Color(0, 0, 0, 0));
+			}
 
 			
 
 			window.clear();
 			window.draw(background2);
-
+			if(person.get_day() % 7 == 0)
+			window.draw(door_olimpia.get_rect());
 			person.draw(window);
 			person.draw_interface(window, scaleX, scaleY);
 			window.draw(text);

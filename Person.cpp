@@ -10,6 +10,7 @@ Person::Person(float scale)
 	
 	float width = sf::VideoMode::getDesktopMode().width;
 	float height = sf::VideoMode::getDesktopMode().height;
+	int tmp = 300;
 
 	energy.setTexture(AssetManager::GetTexture("image/energy.png"));
 	energy.setPosition(1000, 1000);
@@ -19,6 +20,40 @@ Person::Person(float scale)
 	meat.setTexture(AssetManager::GetTexture("image/meat.png"));
 	meat.setScale(0.1, 0.1);
 	meat.setPosition(sf::Vector2f(width - 170, 35));
+
+	leg.setTexture(AssetManager::GetTexture("image/leg.png"));
+	leg.setScale(0.15, 0.15);
+	leg.setPosition(width - 630 - tmp, 32);
+	
+	back.setTexture(AssetManager::GetTexture("image/back.png"));
+	back.setScale(0.12, 0.12);
+	back.setPosition(width - 850 - tmp, 40);
+
+	chest.setTexture(AssetManager::GetTexture("image/chest.png"));
+	chest.setScale(0.1, 0.1);
+	chest.setPosition(width - 1080 - tmp, 40);
+
+	rect_leg.setOutlineThickness(5);
+	rect_leg.setFillColor(sf::Color(0, 0, 0, 0));
+	rect_leg.setOutlineColor(sf::Color::Green);
+	rect_leg.setPosition(width - 690 - tmp, 40);
+	full_rect_leg.setFillColor(sf::Color::Green);
+	full_rect_leg.setPosition(width - 690 - tmp, 40);
+
+	rect_back.setOutlineThickness(5);
+	rect_back.setFillColor(sf::Color(0, 0, 0, 0));
+	rect_back.setOutlineColor(sf::Color::Cyan);
+	rect_back.setPosition(width - 920 - tmp, 40);
+	full_rect_back.setFillColor(sf::Color::Cyan);
+	full_rect_back.setPosition(width - 920 - tmp, 40);
+
+	rect_chest.setOutlineThickness(5);
+	rect_chest.setFillColor(sf::Color(0, 0, 0, 0));
+	rect_chest.setOutlineColor(sf::Color::Magenta);
+	rect_chest.setPosition(width - 1150 - tmp, 40);
+	full_rect_chest.setFillColor(sf::Color::Magenta);
+	full_rect_chest.setPosition(width - 1150 - tmp, 40);
+
 	
 	rect_hunger.setOutlineThickness(5);
 	rect_hunger.setFillColor(sf::Color(0, 0, 0, 0));
@@ -33,6 +68,10 @@ Person::Person(float scale)
 	rect_lvl_sleep.setPosition(sf::Vector2f(width - 460 ,40));
 	full_rect_lvl_sleep.setFillColor(sf::Color::Blue);
 	full_rect_lvl_sleep.setPosition(sf::Vector2f(width - 460, 40));
+
+	set_leg_power(0);
+	set_chest_power(0);
+	set_back_power(0);
 }
 
 
@@ -80,6 +119,15 @@ void Person::draw_interface(sf::RenderWindow& window, float scaleX, float scaleY
 	window.draw(full_rect_hunger);
 	window.draw(rect_lvl_sleep);
 	window.draw(full_rect_lvl_sleep);
+	window.draw(rect_leg);
+	window.draw(full_rect_leg);
+	window.draw(rect_back);
+	window.draw(full_rect_back);
+	window.draw(rect_chest);
+	window.draw(full_rect_chest);
+	window.draw(leg);
+	window.draw(chest);
+	window.draw(back);
 	window.draw(energy);
 	window.draw(meat);
 }
@@ -188,3 +236,48 @@ int Person::get_day()
 	return day;
 }
 
+int Person::get_leg_power()
+{
+	return leg_power;
+}
+
+int Person::get_chest_power()
+{
+	return chest_power;
+}
+
+int Person::get_back_power()
+{
+	return back_power;
+}
+
+void Person::set_back_power(int tmp)
+{
+
+	back_power =  tmp;
+	if (back_power > 100)
+	{
+		back_power = 100;
+	}
+	full_rect_back.setSize(sf::Vector2f(back_power * 2, 50));
+}
+
+void Person::set_chest_power(int tmp)
+{
+	chest_power = tmp;
+	if (chest_power > 100)
+	{
+		chest_power = 100;
+	}
+	full_rect_chest.setSize(sf::Vector2f(chest_power * 2, 50));
+}
+
+void Person::set_leg_power(int tmp)
+{
+	leg_power = tmp;
+	if (leg_power > 100)
+	{
+		leg_power = 100;
+	}
+	full_rect_leg.setSize(sf::Vector2f(leg_power * 2, 50));
+}

@@ -15,3 +15,5 @@ bool isPointClicked(sf::Vector2i mousePos, sf::CircleShape& dot);
 void TrainingSquad(Person& person, sf::RenderWindow& window);
 void workPlay(Person& person, sf::RenderWindow& window);
 void benchPlay(Person& person, sf::RenderWindow& window);
+
+void OlimpiaPlay(Person& person, sf::RenderWindow& window);

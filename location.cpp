@@ -3,6 +3,7 @@
 
 void GymPlay(Person& person, sf::RenderWindow& window)
 {
+	srand(time(NULL));
 	float width = sf::VideoMode::getDesktopMode().width;
 	float height = sf::VideoMode::getDesktopMode().height;
 	float scaleY = height / 512;
@@ -139,6 +140,7 @@ void GymPlay(Person& person, sf::RenderWindow& window)
 						TrainigWheel(person, window);
 						person.update_hunger(10);
 						person.update_sleep(10);
+						person.set_back_power(person.get_back_power() + 5 + rand() % 5);
 						backgroundmusic.play();
 					}
 				}
@@ -460,6 +462,7 @@ void TrainingSquad(Person& person, sf::RenderWindow& window)
 				backgroundmusic.stop();
 				person.update_hunger(2 * repeat);
 				person.update_sleep(4 * repeat);
+				person.set_leg_power(person.get_leg_power() + repeat * 0.5);
 				return;
 			}
 		}
@@ -502,6 +505,7 @@ void TrainingSquad(Person& person, sf::RenderWindow& window)
 					backgroundmusic.stop();
 					person.update_hunger(2 * repeat);
 					person.update_sleep(4 * repeat);
+					person.set_leg_power(person.get_leg_power() + repeat * 0.5);
 					return;
 
 				}
@@ -851,6 +855,7 @@ void benchPlay(Person& person, sf::RenderWindow& window)
 					// Промах - проигрыш
 					person.update_hunger((3 * attemptCount + rand() % 40));
 					person.update_sleep(30);
+					person.set_chest_power(person.get_chest_power() + attemptCount * 1.2);
 					isGameOver = true;
 					resultText.setString("You made " + std::to_string(attemptCount) + " reapets");
 					window.clear();
@@ -900,6 +905,7 @@ void benchPlay(Person& person, sf::RenderWindow& window)
 		if (isGameOver && clock.getElapsedTime() >= endDelay) {
 			person.update_sleep(25);
 			person.update_hunger((2 * attemptCount + rand() % 20));
+			person.set_chest_power(person.get_chest_power() + attemptCount * 1.2);
 			return;
 		}
 
@@ -928,3 +934,131 @@ void benchPlay(Person& person, sf::RenderWindow& window)
 	}
 
 }
+
+void OlimpiaPlay(Person& person, sf::RenderWindow& window)
+{
+	srand(time(NULL));
+	float width = sf::VideoMode::getDesktopMode().width;
+	float height = sf::VideoMode::getDesktopMode().height;
+	float scaleY = height / 512;
+	float scaleX = width / 512;
+	bool chance = (person.get_back_power() + person.get_chest_power() + person.get_leg_power()) > (50 + rand() % 100);
+	person.set_back_power(person.get_back_power() / 2);
+	person.set_chest_power(person.get_chest_power() / 2);
+	person.set_leg_power(person.get_leg_power() / 2);
+	person.update_hunger(20);
+	person.update_sleep(100);
+	
+	sf::RectangleShape background(sf::Vector2f(width, height));
+	background.setTexture(&AssetManager::GetTexture("image/black.png"));
+	window.clear();
+	window.draw(background);
+	window.display();
+	sf::sleep(sf::seconds(0.5));
+	background.setTexture(&AssetManager::GetTexture("image/posing/pos1.png"));
+	sf::Music music;
+	music.openFromFile("sound/sonne.wav");
+	music.setLoop(true);
+	music.setVolume(20);
+	music.play();
+	sf::Text text;
+	text.setFont(AssetManager::GetFont("font/mainmenu.otf")); // Устанавливаем шрифт
+	text.setCharacterSize(50); // Размер шрифта
+	text.setFillColor(sf::Color::White); // Цвет текста
+	text.setPosition(200 * scaleX, 300 * scaleY);
+
+	window.clear();
+	window.draw(background);
+	window.display();
+	sf::sleep(sf::seconds(0.2));
+	background.setTexture(&AssetManager::GetTexture("image/posing/pos2.png"));
+	window.clear();
+	window.draw(background);
+	window.display();
+	sf::sleep(sf::seconds(0.2));
+	background.setTexture(&AssetManager::GetTexture("image/posing/pos3.png"));
+	window.clear();
+	window.draw(background);
+	window.display();
+	sf::sleep(sf::seconds(0.2));
+	background.setTexture(&AssetManager::GetTexture("image/posing/pos4.png"));
+	window.clear();
+	window.draw(background);
+	window.display();
+	sf::sleep(sf::seconds(0.2));
+	background.setTexture(&AssetManager::GetTexture("image/posing/pos5.png"));
+	window.clear();
+	window.draw(background);
+	window.display();
+	sf::sleep(sf::seconds(1));
+	background.setTexture(&AssetManager::GetTexture("image/posing/pos6.png"));
+	window.clear();
+	window.draw(background);
+	window.display(); sf::sleep(sf::seconds(0.2));
+	background.setTexture(&AssetManager::GetTexture("image/posing/pos7.png"));
+	window.clear();
+	window.draw(background);
+	window.display(); sf::sleep(sf::seconds(0.2));
+	background.setTexture(&AssetManager::GetTexture("image/posing/pos8.png"));
+	window.clear();
+	window.draw(background);
+	window.display();
+	sf::sleep(sf::seconds(0.2));
+	background.setTexture(&AssetManager::GetTexture("image/posing/pos9.png"));
+	window.clear();
+	window.draw(background);
+	window.display();
+	sf::sleep(sf::seconds(1));
+	background.setTexture(&AssetManager::GetTexture("image/posing/pos10.png"));
+	window.clear();
+	window.draw(background);
+	window.display();
+	sf::sleep(sf::seconds(0.2));
+	background.setTexture(&AssetManager::GetTexture("image/posing/pos11.png"));
+	window.clear();
+	window.draw(background);
+	window.display();
+	sf::sleep(sf::seconds(0.2));
+	if (chance)
+
+	{
+		text.setString("You win Ollimpia!");
+		person.update_money(-10000);
+	}
+	else { text.setString("You lose Olimpia"); person.update_money(-1000 - rand() % 333); }
+	background.setTexture(&AssetManager::GetTexture("image/posing/pos12.png"));
+	window.clear();
+	window.draw(background);
+	window.draw(text);
+	window.display();
+	sf::sleep(sf::seconds(1));
+	
+	while (window.isOpen())
+	{
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			switch (event.type)
+			{
+			case sf::Event::KeyPressed:
+				if (event.key.code == sf::Keyboard::Return)
+				{
+					background.setTexture(&AssetManager::GetTexture("image/black.png"));
+					window.clear();
+					window.draw(background);
+					window.display();
+					sf::sleep(sf::seconds(0.5));
+					return;
+				}
+			default:
+				break;
+			}
+		}
+		window.clear();
+		window.draw(background);
+		window.draw(text);
+		window.display();
+	}
+}
+
+

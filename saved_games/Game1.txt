@@ -1,4 +1,7 @@
-Day: 3
-Money: 7000
+Day: 6
+Money: 5600
 LevelSleep: 0
-LevelHunger: 10
+LevelHunger: 24
+Leg: 9
+Back: 6
+Chest: 3

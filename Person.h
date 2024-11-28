@@ -26,12 +26,19 @@ public:
 	void update_sleep(int procant); // увеличить желание спать
 	void update_money(int coast);
 	void update_day();
+	//гетеры
 	int get_hunger();
 	int get_money();
 	int get_lvl_sleep();
 	int get_day();
+	int get_leg_power();
+	int get_chest_power();
+	int get_back_power();
 
-	
+
+	void set_back_power(int tmp);
+	void set_chest_power(int tmp);
+	void set_leg_power(int tmp);
 
 
 private:
@@ -40,9 +47,9 @@ private:
 	int lvl_sleep = 0; // 100 - max
 	int hunger = 0; // 100 - max
 	int day = 1;
-	float leg_power = 10;
-	float chest_power = 10;
-	float back_power = 10;
+	int leg_power = 0;
+	int chest_power = 0;
+	int back_power = 0;
 	
 	sf::Sprite meat;
 	sf::Sprite energy;
@@ -51,6 +58,23 @@ private:
 
 	sf::RectangleShape full_rect_hunger = sf::RectangleShape(sf::Vector2f(200, 50));
 	sf::RectangleShape full_rect_lvl_sleep = sf::RectangleShape(sf::Vector2f(200, 50));
+
+	sf::Sprite leg;
+	sf::Sprite chest;
+	sf::Sprite back;
+
+	sf::RectangleShape rect_chest = sf::RectangleShape(sf::Vector2f(200, 50));
+	sf::RectangleShape rect_leg = sf::RectangleShape(sf::Vector2f(200, 50));
+
+	sf::RectangleShape rect_back = sf::RectangleShape(sf::Vector2f(200, 50));
+	sf::RectangleShape full_rect_chest = sf::RectangleShape(sf::Vector2f(200, 50));
+
+	sf::RectangleShape full_rect_leg = sf::RectangleShape(sf::Vector2f(200, 50));
+	sf::RectangleShape full_rect_back = sf::RectangleShape(sf::Vector2f(200, 50));
+
+	
+
+
 
 
 
