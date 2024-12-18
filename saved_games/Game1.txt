@@ -1,4 +1,4 @@
-Day: 6
+Day: 7
 Money: 5600
 LevelSleep: 0
 LevelHunger: 24

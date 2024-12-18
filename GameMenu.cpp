@@ -15,7 +15,7 @@ void game::GameMenu::setTextStyle(sf::Text& text, float x, float y, const sf::St
 {
 	text.setFont(AssetManager::GetFont("font/mainmenu.otf"));
 	text.setPosition(x, y);
-	text.setString(content);  // Здесь теперь тоже используется sf::String
+	text.setString(content); 
 	text.setCharacterSize(size_font);
 	text.setFillColor(menu_text_color);
 }

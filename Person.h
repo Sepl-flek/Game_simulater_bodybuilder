@@ -13,14 +13,11 @@ public:
 
 
 	void move(sf::Vector2f move_rec,float wedth,float height);
-	void set_position(float x, float y);
-	void set_scale(float x, float y);
-	void set_day(int _day);
+	
 	void draw(sf::RenderWindow& window); 
 	void draw_interface(sf::RenderWindow& window,float scaleX,float scaleY);
 	void animation(int trafic);
-	sf::Vector2f get_position();
-	sf::FloatRect get_global_bounds() const;
+
 
 	void update_hunger(int procant); // увеличить голод
 	void update_sleep(int procant); // увеличить желание спать
@@ -34,11 +31,16 @@ public:
 	int get_leg_power();
 	int get_chest_power();
 	int get_back_power();
+	sf::Vector2f get_position();
+	sf::FloatRect get_global_bounds() const;
 
 
 	void set_back_power(int tmp);
 	void set_chest_power(int tmp);
 	void set_leg_power(int tmp);
+	void set_position(float x, float y);
+	void set_scale(float x, float y);
+	void set_day(int _day);
 
 
 private:
