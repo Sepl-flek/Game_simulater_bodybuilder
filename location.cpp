@@ -128,7 +128,7 @@ void GymPlay(Person& person, sf::RenderWindow& window)
 					sf::sleep(sf::seconds(0.5));
 					//background.setTexture(&AssetManager::GetTexture("image/background2.png"));
 					person.set_position(475 * scaleX, 145 * scaleY);
-					person.set_scale(2, 2);
+					person.set_scale(height/800, height/800);
 					backgroundmusic.stop();
 					return;
 				}

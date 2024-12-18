@@ -12,7 +12,7 @@ void workgame(sf::RenderWindow& window,Person &person)
         // �������������� ������
         sf::Texture textureInfoPanel;
         textureInfoPanel.loadFromFile("pictures/Panel.png");
-        sf::RectangleShape gameInfoPanel(sf::Vector2f(width, 113));
+        sf::RectangleShape gameInfoPanel(sf::Vector2f(width, height/14.1));
         gameInfoPanel.setTexture(&textureInfoPanel);
         gameInfoPanel.setPosition(sf::Vector2f(0, 0));
 
@@ -58,11 +58,11 @@ void workgame(sf::RenderWindow& window,Person &person)
 
         plusfull.setFont(AssetManager::GetFont("font/mainmenu.otf"));
         plusfull.setFillColor(sf::Color::Green);
-        plusfull.setCharacterSize(25);
+        plusfull.setCharacterSize(height/64);
 
         end_game.setFont(AssetManager::GetFont("font/mainmenu.otf"));
         end_game.setFillColor(sf::Color::Red);
-        end_game.setCharacterSize(100);
+        end_game.setCharacterSize(height/16);
         end_game.setString(L"КОНЕЦ ИГРЫ");
         end_game.setPosition(300 * scaleX, 333 * scaleY);
 
@@ -84,7 +84,7 @@ void workgame(sf::RenderWindow& window,Person &person)
         sf::Sprite ship;
         ship.setTexture(textureShip);
         ship.setTextureRect(sf::IntRect(0, FramePlanim.Frame, 90, 90));
-        ship.scale(1, 1);
+        ship.scale(height/1600, height/1600);
         ship.setPosition(sf::Vector2f(80, 380));
         //.........................................
 
