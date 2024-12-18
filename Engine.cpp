@@ -21,15 +21,15 @@ void Engine::GameMenu()
 	window.setMouseCursorVisible(false);
 
 	std::vector<sf::String> name_menu = { L"Play","Load Game","Exit"};
-	game::GameMenu mymenu(window, 1250, 600, 100, 250, name_menu);
+	game::GameMenu mymenu(window, width/2, height/3, height/16, height/6.4, name_menu);
 	
 	mymenu.setColorTextMenu(sf::Color(235, 78, 78), sf::Color::Yellow);
 	mymenu.AlignMenu(2);
 
 	//Задний фон
 	sf::RectangleShape background(sf::Vector2f(width, height));
-	person.set_scale(5,5);
-	person.set_position(1250, 700);
+	person.set_scale(height/320,height/320);
+	person.set_position(width/2, height/2.2);
 
 	background.setTexture(&AssetManager::GetTexture("image/menu.jpg"));
 
@@ -37,7 +37,7 @@ void Engine::GameMenu()
 	Titul.setFont(AssetManager::GetFont("font/mainmenu.otf"));
 
     
-    setTextStyle(Titul, 770, 50, 120, sf::Color(235, 78, 78), "Bodybuilder Club");// параметры главного текста
+    setTextStyle(Titul, width/3.2, height/32, height/13.3, sf::Color(235, 78, 78), "Bodybuilder Club");// параметры главного текста
 
 	sf::Sound sound_next;
 	sound_next.setBuffer(AssetManager::GetSoundBuffer("sound/audiomenu2.wav"));
@@ -113,11 +113,11 @@ void Engine::GamePlay()
 	window.setVerticalSyncEnabled(true);
 	sf::Text text;
 	text.setFont(AssetManager::GetFont("font/mainmenu.otf")); // Устанавливаем шрифт
-	text.setCharacterSize(50); // Размер шрифта
+	text.setCharacterSize(height/32); // Размер шрифта
 	text.setFillColor(sf::Color::White); // Цвет текста
 	sf::Text day;
 	day.setFont(AssetManager::GetFont("font/mainmenu.otf")); // Устанавливаем шрифт
-	day.setCharacterSize(50); // Размер шрифта
+	day.setCharacterSize(height / 32); // Размер шрифта
 	day.setFillColor(sf::Color::White); // Цвет текста
 	
 	backgroundmusic.openFromFile("sound/Gameplay.wav");
@@ -137,7 +137,7 @@ void Engine::GamePlay()
 	background2.setTexture(&AssetManager::GetTexture("image/background.png"));
 
 	// масштабы
-	person.set_scale(2, 2);
+	person.set_scale(height/800, height / 800);
 	float scaleY = height / 512;
 	float scaleX = width / 512;
 	text.setPosition(10 * scaleX, 10 * scaleY);
@@ -372,7 +372,7 @@ void Engine::HomePlay(sf::RenderWindow& window)
 	sf::Clock clock, clockAnimPlay;
 	
 	
-	person.set_scale(3, 3);
+	person.set_scale(height/533, height / 533);
 
 	const float parametr = 2;
 	int traffic = 0; // вид анимации
@@ -383,13 +383,13 @@ void Engine::HomePlay(sf::RenderWindow& window)
 
 	sf::Text text;
 	text.setFont(AssetManager::GetFont("font/mainmenu.otf")); // Устанавливаем шрифт
-	text.setCharacterSize(50); // Размер шрифта
+	text.setCharacterSize(height/32); // Размер шрифта
 	text.setFillColor(sf::Color::White); // Цвет текста
 	text.setPosition(10 * scaleX, 10 * scaleY);
 
 	sf::Text day;
 	day.setFont(AssetManager::GetFont("font/mainmenu.otf")); // Устанавливаем шрифт
-	day.setCharacterSize(50); // Размер шрифта
+	day.setCharacterSize(height / 32); // Размер шрифта
 	day.setFillColor(sf::Color::White);
 	day.setPosition(70 * scaleX, 10 * scaleY);
 
@@ -455,7 +455,7 @@ void Engine::HomePlay(sf::RenderWindow& window)
 					sf::sleep(sf::seconds(0.5));
 					background.setTexture(&AssetManager::GetTexture("image/background2.png"));
 					person.set_position(99 * scaleX, 185 * scaleY);
-					person.set_scale(2, 2);
+					person.set_scale(height/800, height / 800);
 			
 					return;
 				}

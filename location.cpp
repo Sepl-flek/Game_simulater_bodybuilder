@@ -21,17 +21,17 @@ void GymPlay(Person& person, sf::RenderWindow& window)
 
 	sf::Text day;
 	day.setFont(AssetManager::GetFont("font/mainmenu.otf")); // Устанавливаем шрифт
-	day.setCharacterSize(50); // Размер шрифта
+	day.setCharacterSize(height/32); // Размер шрифта
 	day.setFillColor(sf::Color::White); // Цвет текста
 
 	sf::Text text;
 	text.setFont(AssetManager::GetFont("font/mainmenu.otf")); // Устанавливаем шрифт
-	text.setCharacterSize(50); // Размер шрифта
+	text.setCharacterSize(height / 32); // Размер шрифта
 	text.setFillColor(sf::Color::White); // Цвет текста
 
 	text.setPosition(10 * scaleX, 10 * scaleY);
 	day.setPosition(70 * scaleX, 10 * scaleY);
-	person.set_scale(3, 3);
+	person.set_scale(height/533, height/533);
 
 	sf::Vector2f position = person.get_position();
 
@@ -284,7 +284,7 @@ void TrainigWheel(Person& person, sf::RenderWindow& window)
 	backgroundmusic.play();
 
 	// Параметры точек
-	const int dotSize = 100;
+	const int dotSize = height/16;
 	const int minDots = 5;
 	const int maxDots = 7;
 	std::vector<sf::CircleShape> dots;
@@ -366,7 +366,7 @@ void TrainigWheel(Person& person, sf::RenderWindow& window)
 			sf::Text resultText;
 			resultText.setFont(AssetManager::GetFont("font/mainmenu.otf"));
 			resultText.setString("Time's up! Popped dots: " + std::to_string(poppedDots) + "\nPress Enter to exit.");
-			resultText.setCharacterSize(50);
+			resultText.setCharacterSize(height/32);
 			resultText.setFillColor(sf::Color::White);
 			resultText.setPosition(200*scaleX, 200*scaleY);
 
@@ -416,7 +416,7 @@ void TrainingSquad(Person& person, sf::RenderWindow& window)
 	
 	sf::Text instructionText;
 	instructionText.setFont(AssetManager::GetFont("font/mainmenu.otf"));
-	instructionText.setCharacterSize(50);
+	instructionText.setCharacterSize(height / 32);
 	instructionText.setFillColor(sf::Color::White);
 	instructionText.setPosition(175*scaleX, 200*scaleY);
 	instructionText.setString("Press E to start the challenge");
@@ -554,12 +554,12 @@ void workPlay(Person& person, sf::RenderWindow& window)
 
 	sf::Text day;
 	day.setFont(AssetManager::GetFont("font/mainmenu.otf")); // Устанавливаем шрифт
-	day.setCharacterSize(50); // Размер шрифта
+	day.setCharacterSize(height / 32); // Размер шрифта
 	day.setFillColor(sf::Color::White); // Цвет текста
 
 	sf::Text text;
 	text.setFont(AssetManager::GetFont("font/mainmenu.otf")); // Устанавливаем шрифт
-	text.setCharacterSize(50); // Размер шрифта
+	text.setCharacterSize(height / 32); // Размер шрифта
 	text.setFillColor(sf::Color::White); // Цвет текста
 
 	text.setPosition(10 * scaleX, 10 * scaleY);
@@ -657,7 +657,7 @@ void workPlay(Person& person, sf::RenderWindow& window)
 					sf::sleep(sf::seconds(0.5));
 					//background.setTexture(&AssetManager::GetTexture("image/background2.png"));
 					person.set_position(475 * scaleX, 145 * scaleY);
-					person.set_scale(2, 2);
+					person.set_scale(height/800, height / 800);
 
 					return;
 				}
@@ -963,7 +963,7 @@ void OlimpiaPlay(Person& person, sf::RenderWindow& window)
 	music.play();
 	sf::Text text;
 	text.setFont(AssetManager::GetFont("font/mainmenu.otf")); // Устанавливаем шрифт
-	text.setCharacterSize(50); // Размер шрифта
+	text.setCharacterSize(height/32); // Размер шрифта
 	text.setFillColor(sf::Color::White); // Цвет текста
 	text.setPosition(200 * scaleX, 300 * scaleY);
 
