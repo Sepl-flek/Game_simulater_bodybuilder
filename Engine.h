@@ -13,11 +13,14 @@
 #include <filesystem>
 #include "load.h"
 
+std::string filepath_finder();
+
 namespace fs = std::filesystem;
 class Engine
 {
 	AssetManager manager; // менеджер ресурсов
-	std::string filename = "D:/Visual-studio/projects/Game_body/saved_games";
+	std::string filename;
+	std::string folderpath;
 
 	Person person = Person(1);
 	

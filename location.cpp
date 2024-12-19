@@ -564,7 +564,7 @@ void workPlay(Person& person, sf::RenderWindow& window)
 
 	text.setPosition(10 * scaleX, 10 * scaleY);
 	day.setPosition(70 * scaleX, 10 * scaleY);
-	person.set_scale(3, 3);
+	person.set_scale(height/533, height / 533);
 
 
 	sf::Vector2f position = person.get_position();

@@ -709,7 +709,8 @@ void Engine::draw()
 
 Engine::Engine()
 {
-	
+	filename = filepath_finder();
+	folderpath = filename;
 
 }
 
@@ -746,8 +747,12 @@ void Engine::LoadGame(sf::RenderWindow& window,Person& person)
 	sf::Sound sound_next;
 	sound_next.setBuffer(AssetManager::GetSoundBuffer("sound/audiomenu2.wav"));
 	sf::Sound enter;
+	
 	enter.setBuffer(AssetManager::GetSoundBuffer("sound/audiomenu5.wav"));
-	std::string folderPath = "D:/Visual-studio/projects/Game_body/saved_games";
+
+	std::string folderPath = folderpath;
+
+
 	std::vector<std::string> files = getFilesInDirectory(folderPath);
 	
 	std::vector<sf::Text> filestexts;
@@ -843,4 +848,25 @@ void Engine::LoadGame(sf::RenderWindow& window,Person& person)
 	}
 }
 
+std::string filepath_finder()
+{
+	
+		// Получаем текущую рабочую директорию
+		std::filesystem::path current_path = std::filesystem::current_path();
+
+		// Добавляем относительный путь к папке saved_games
+		std::filesystem::path folder_path = current_path / "saved_games";
+
+		// Преобразуем в абсолютный путь
+		folder_path = std::filesystem::absolute(folder_path);
+
+		// Преобразуем путь в строку
+		std::string folder_path_string = folder_path.string();
+
+		// Заменяем обратные слеши на прямые
+		std::replace(folder_path_string.begin(), folder_path_string.end(), '\\', '/');
+
+		return folder_path_string;
+}
+	
 
