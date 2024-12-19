@@ -10,64 +10,64 @@ Person::Person(float scale)
 	
 	float width = sf::VideoMode::getDesktopMode().width;
 	float height = sf::VideoMode::getDesktopMode().height;
-	int tmp = 300;
+	int tmp = width/300;
 
 	energy.setTexture(AssetManager::GetTexture("image/energy.png"));
-	energy.setPosition(1000, 1000);
-	energy.setScale(sf::Vector2f(0.1, 0.1));
-	energy.setPosition(sf::Vector2f(width - 380, 45));
+	energy.setPosition(width/2.5, height/1.6);
+	energy.setScale(sf::Vector2f(height/16000, height / 16000));
+	energy.setPosition(sf::Vector2f(width - width/6.5, 45));
 
 	meat.setTexture(AssetManager::GetTexture("image/meat.png"));
 	meat.setScale(0.1, 0.1);
-	meat.setPosition(sf::Vector2f(width - 170, 35));
+	meat.setPosition(sf::Vector2f(width - width/14.7, 35));
 
 	leg.setTexture(AssetManager::GetTexture("image/leg.png"));
 	leg.setScale(0.15, 0.15);
-	leg.setPosition(width - 630 - tmp, 32);
+	leg.setPosition(width - width/3.9 - tmp, 32);
 	
 	back.setTexture(AssetManager::GetTexture("image/back.png"));
 	back.setScale(0.12, 0.12);
-	back.setPosition(width - 850 - tmp, 40);
+	back.setPosition(width - width/2.9 - tmp, 40);
 
 	chest.setTexture(AssetManager::GetTexture("image/chest.png"));
 	chest.setScale(0.1, 0.1);
-	chest.setPosition(width - 1080 - tmp, 40);
+	chest.setPosition(width - width/2.3 - tmp, 40);
 
 	rect_leg.setOutlineThickness(5);
 	rect_leg.setFillColor(sf::Color(0, 0, 0, 0));
 	rect_leg.setOutlineColor(sf::Color::Green);
-	rect_leg.setPosition(width - 690 - tmp, 40);
+	rect_leg.setPosition(width - width/3.6 - tmp, 40);
 	full_rect_leg.setFillColor(sf::Color::Green);
-	full_rect_leg.setPosition(width - 690 - tmp, 40);
+	full_rect_leg.setPosition(width - width/3.6 - tmp, 40);
 
 	rect_back.setOutlineThickness(5);
 	rect_back.setFillColor(sf::Color(0, 0, 0, 0));
 	rect_back.setOutlineColor(sf::Color::Cyan);
-	rect_back.setPosition(width - 920 - tmp, 40);
+	rect_back.setPosition(width - width/2.7 - tmp, 40);
 	full_rect_back.setFillColor(sf::Color::Cyan);
-	full_rect_back.setPosition(width - 920 - tmp, 40);
+	full_rect_back.setPosition(width - width/2.7 - tmp, 40);
 
 	rect_chest.setOutlineThickness(5);
 	rect_chest.setFillColor(sf::Color(0, 0, 0, 0));
 	rect_chest.setOutlineColor(sf::Color::Magenta);
-	rect_chest.setPosition(width - 1150 - tmp, 40);
+	rect_chest.setPosition(width - width/2.2 - tmp, 40);
 	full_rect_chest.setFillColor(sf::Color::Magenta);
-	full_rect_chest.setPosition(width - 1150 - tmp, 40);
+	full_rect_chest.setPosition(width - width/2.2 - tmp, 40);
 
 	
 	rect_hunger.setOutlineThickness(5);
 	rect_hunger.setFillColor(sf::Color(0, 0, 0, 0));
 	rect_hunger.setOutlineColor(sf::Color::Red);
-	rect_hunger.setPosition(sf::Vector2f(width - 230,40));
+	rect_hunger.setPosition(sf::Vector2f(width - width/10.8,40));
 	full_rect_hunger.setFillColor(sf::Color::Red);
-	full_rect_hunger.setPosition(sf::Vector2f(width - 230, 40));
+	full_rect_hunger.setPosition(sf::Vector2f(width - width/10.8, 40));
 
 	rect_lvl_sleep.setOutlineThickness(5);
 	rect_lvl_sleep.setFillColor(sf::Color(0, 0, 0, 0));
 	rect_lvl_sleep.setOutlineColor(sf::Color::Blue);
-	rect_lvl_sleep.setPosition(sf::Vector2f(width - 460 ,40));
+	rect_lvl_sleep.setPosition(sf::Vector2f(width - width/5.4,40));
 	full_rect_lvl_sleep.setFillColor(sf::Color::Blue);
-	full_rect_lvl_sleep.setPosition(sf::Vector2f(width - 460, 40));
+	full_rect_lvl_sleep.setPosition(sf::Vector2f(width - width/5.4, 40));
 
 	set_leg_power(0);
 	set_chest_power(0);
